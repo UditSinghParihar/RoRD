@@ -1,5 +1,5 @@
 # RoRD  
-Rotation Robust Descriptors  
+Rotation-Robust Descriptors and Orthographic Views for Local Feature Matching  
 
 <!-- ![Alt Text](images/teaser.jpg) -->
 <!-- <img src="images/teaser.jpg" alt="teaser" width="450"/> -->
@@ -10,7 +10,10 @@ Rotation Robust Descriptors
  -->
 <img src="images/teaser2.jpg" alt="pipeline" width="1000" height="220" />  
 
-**Local feature matches using RoRD**. Our method RoRD finds precise local feature correspondences under extreme viewpoint (180 degrees) changes for both indoor and outdoor sequences.
+**Local feature matches using RoRD**. Our method RoRD finds precise local feature correspondences under extreme viewpoint (180 degrees) changes for both indoor and outdoor sequences.  
+
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/548cq_NOMPs" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 
 ## Abstract   
