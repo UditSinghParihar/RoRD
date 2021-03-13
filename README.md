@@ -1,5 +1,8 @@
-# RoRD  
-Rotation-Robust Descriptors and Orthographic Views for Local Feature Matching  
+# RoRD: Rotation-Robust Descriptors and Orthographic Views for Local Feature Matching  
+#### Udit Singh Parihar<sup>\*</sup>, Aniket Gujarathi<sup>\*</sup>, Kinal Mehta<sup>\*</sup>, Satyajit Tourani<sup>\*</sup>, Sourav Garg, Michael Milford and K. Madhava Krishna  
+
+<sup>\*</sup> Denotes Equal Contribution 
+
 
 <!-- ![Alt Text](images/teaser.jpg) -->
 <!-- <img src="images/teaser.jpg" alt="teaser" width="450"/> -->
@@ -47,3 +50,8 @@ The three sequences of this dataset are as follows:
 **Qualitative results from the DiverseView dataset**. Each row corresponds to a different sequence from the dataset. *RoRD* leverages its learnt *rotation-robust features* to obtain precise feature correspondences, outperforming D2-net. Incorporating orthographic views with RoRD, *(RoRD + OV)* further improves performance, and outperforms both D2-Net and RoRD for all the four sequences.  
 
 
+<p align="center">
+<img src="images/mma.jpg" alt="results" width="800"/>
+</p> 
+
+**MMA results on standard and proposed HPatches variant** 
