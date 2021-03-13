@@ -1,8 +1,10 @@
 # RoRD: Rotation-Robust Descriptors and Orthographic Views for Local Feature Matching  
-#### Udit Singh Parihar<sup>\*</sup>, Aniket Gujarathi<sup>\*</sup>, Kinal Mehta<sup>\*</sup>, Satyajit Tourani<sup>\*</sup>, Sourav Garg, Michael Milford and K. Madhava Krishna  
+#### Udit Singh Parihar<sup>\*1</sup>, Aniket Gujarathi<sup>\*1</sup>, Kinal Mehta<sup>\*1</sup>, Satyajit Tourani<sup>\*1</sup>, Sourav Garg<sup>2</sup>, Michael Milford<sup>2</sup> and K. Madhava Krishna<sup>1</sup>  
 
-<sup>\*</sup> Denotes Equal Contribution 
 
+<sup>\*</sup> Denotes Equal Contribution  
+<sup>1</sup> Robotics Research Center, IIIT Hyderabad.  
+<sup>2</sup> QUT Centre for Robotics, Queensland University of Technology (QUT), Australia. 
 
 <!-- ![Alt Text](images/teaser.jpg) -->
 <!-- <img src="images/teaser.jpg" alt="teaser" width="450"/> -->
@@ -54,4 +56,4 @@ The three sequences of this dataset are as follows:
 <img src="images/mma.jpg" alt="results" width="800"/>
 </p> 
 
-**MMA results on standard and proposed HPatches variant** 
+**MMA results on standard and proposed HPatches variant.** 

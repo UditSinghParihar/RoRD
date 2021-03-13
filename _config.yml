@@ -1,3 +1,5 @@
 theme: jekyll-theme-cayman
 title: RoRD
 description: Rotation-Robust Descriptors and Orthographic Views for Local Feature Matching
+github:
+  is_project_page: false
