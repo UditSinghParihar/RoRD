@@ -6,6 +6,9 @@
 <sup>1</sup> Robotics Research Center, IIIT Hyderabad.  
 <sup>2</sup> QUT Centre for Robotics, Queensland University of Technology (QUT), Australia. 
 
+
+#### [Paper](https://arxiv.org/abs/2103.08573)
+
 <!-- ![Alt Text](images/teaser.jpg) -->
 <!-- <img src="images/teaser.jpg" alt="teaser" width="450"/> -->
 
