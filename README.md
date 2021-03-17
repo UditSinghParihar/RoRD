@@ -56,7 +56,8 @@ The three sequences of this dataset are as follows:
 
 
 <p align="center">
-<img src="images/mma.jpg" alt="results" width="800"/>
+<img src="images/hseq.png" alt="results" width="400"/>
+<img src="images/hseq_rotated.png" alt="results" width="400"/>
 </p> 
 
 **MMA results on standard and proposed HPatches variant.** 
