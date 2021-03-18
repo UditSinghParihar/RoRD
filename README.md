@@ -5,7 +5,7 @@ Rotation-Robust Descriptors and Orthographic Views for Local Feature Matching
 > [Paper link](https://arxiv.org/abs/2103.08573)
 
 ## Dataset Links
-- [PhotoTourism](https://www.cs.ubc.ca/research/image-matching-challenge/data/): Used for training
+- [PhotoTourism](https://www.cs.ubc.ca/~kmyi/imw2020/data.html): Used for training
 - [Oxford RobotCar](add_link): Used for training and VPR evaluation
 - [Hpatches](https://github.com/hpatches/hpatches-dataset): MMA evaluation
 - [Rotated Hpatches](add_link): MMA evaluation
@@ -17,7 +17,7 @@ Rotation-Robust Descriptors and Orthographic Views for Local Feature Matching
 - [D2-Net](https://dsmn.ml/files/d2-net/d2_tf.pth)
 
 ## Credits
-Most of the code is borrowed from [D2-Net](https://github.com/mihaidusmanu/d2-net). Other scripts such as dataloaders and training scripts are provided.
+Our base model is borrowed from [D2-Net](https://github.com/mihaidusmanu/d2-net).  
 
 ## BibTex
 If you use this code in your project, please cite the following paper:
