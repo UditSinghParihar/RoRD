@@ -1,15 +1,19 @@
 # RoRD
 Rotation-Robust Descriptors and Orthographic Views for Local Feature Matching
 
-> [Project Page](https://uditsinghparihar.github.io/RoRD/)
-> [Paper link](https://arxiv.org/abs/2103.08573)
+> [Project Page](https://uditsinghparihar.github.io/RoRD/) | [Paper link](https://arxiv.org/abs/2103.08573)
 
-## Dataset Links
-- [PhotoTourism](https://www.cs.ubc.ca/~kmyi/imw2020/data.html): Used for training
-- [Oxford RobotCar](add_link): Used for training and VPR evaluation
+## Evaluation and Datasets
+<!-- - [PhotoTourism](https://www.cs.ubc.ca/~kmyi/imw2020/data.html): For MMA evaluation.  
+- Oxford RobotCar: For [training](https://robotcar-dataset.robots.ox.ac.uk/datasets/2014-07-14-14-49-50/) and [testing](https://robotcar-dataset.robots.ox.ac.uk/datasets/2014-06-26-09-24-58/) for visual place recognition task.  
 - [Hpatches](https://github.com/hpatches/hpatches-dataset): MMA evaluation
 - [Rotated Hpatches](add_link): MMA evaluation
-- [DiverseView](add_link): R/t evaluation on high viewpoint changes
+- [DiverseView](add_link): R/t evaluation on high viewpoint changes -->
+
+- **MMA** : Training on [PhotoTourism](https://www.cs.ubc.ca/~kmyi/imw2020/data.html) and testing on [HPatches](https://github.com/hpatches/hpatches-dataset) and proposed [Rotated HPatches](add_link)
+- **Pose Estimation** : Training on same PhotoTourism datasets as used for MMA and testing on proposed [DiverseView](add_link)
+- **Visual Place Recognition** : Oxford RobotCar [training sequence](https://robotcar-dataset.robots.ox.ac.uk/datasets/2014-07-14-14-49-50/) and [testing sequence](https://robotcar-dataset.robots.ox.ac.uk/datasets/2014-06-26-09-24-58/)
+
 
 ## Pretrained Models
 - [RoRD](add_link)
