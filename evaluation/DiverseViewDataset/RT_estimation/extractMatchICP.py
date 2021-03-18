@@ -1,12 +1,13 @@
 import numpy as np
 import argparse
 import copy
+import os, sys
 import open3d as o3d
 from sys import argv
 from PIL import Image
 import math
-from extractMatchTop import getPerspKeypoints, getPerspKeypoints2, siftMatching, super_point_matcher
-import os
+sys.path.append("../../../")
+from lib.extractMatchTop import getPerspKeypoints, getPerspKeypoints2, siftMatching, super_point_matcher
 import pandas as pd
 
 
@@ -21,11 +22,11 @@ device = torch.device('cuda:0' if use_cuda else 'cpu')
 parser = argparse.ArgumentParser(description='RoRD ICP evaluation')
 
 parser.add_argument(
-    '--rgb_csv', type=str, required=True,
+    '--rgb_csv', type=str, default='/scratch/udit/realsense/dataVO/data2/rtImagesRgb.csv',
     help='path to the csv file containing rgb images of query-database pairs'
 )
 parser.add_argument(
-    '--depth_csv', type=str, required=True,
+    '--depth_csv', type=str, default='/scratch/udit/realsense/dataVO/data2/rtImagesDepth.csv',
     help='path to the csv file containing depth files of query-database pairs'
 )
 
@@ -57,7 +58,7 @@ parser.add_argument(
 parser.add_argument(
     '--superpoint', action='store_true',
     help='SuperPoint evaluation'
-)
+) ### Use the SuperGlue repository
 
 parser.add_argument(
     '--camera_file', type=str, default='/home/udit/d2-net/camera.txt',
@@ -71,6 +72,9 @@ parser.add_argument(
 
 args = parser.parse_args()
 
+if args.model_ens: # Change default paths accordingly for ensemble
+    model1_ens = '/home/udit/udit/d2-net/models/d2_kinal_ipr.pth'
+    model2_ens = '/home/udit/udit/d2-net/models/d2_tf.pth'
 
 def draw_registration_result(source, target, transformation):
 	source_temp = copy.deepcopy(source)
@@ -222,6 +226,10 @@ if __name__ == "__main__":
             elif args.model_d2:
                 srcPts, trgPts = getPerspKeypoints(im_q, im_d[1][1], srcH, trgH, model1, device)
             elif args.model_ens:
+                model1 = D2Net(model_file=model1_ens)
+                model1 = model1.to(device)
+                model2 = D2Net(model_file=model2_ens)
+                model2 = model2.to(device)
                 srcPts, trgPts = getPerspKeypoints2(model1, model2, im_q, im_d[1][1], srcH, trgH, device)
             elif args.sift:
                 srcPts, trgPts = siftMatching(im_q, im_d[1][1], srcH, trgH, device)

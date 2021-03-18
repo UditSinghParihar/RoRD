@@ -215,7 +215,7 @@ def siftMatching(img1, img2, HFile1, HFile2, device):
 	src_pts = np.float32([ inlier_keypoints_left[m.queryIdx].pt for m in placeholder_matches ]).reshape(-1, 2)
 	dst_pts = np.float32([ inlier_keypoints_right[m.trainIdx].pt for m in placeholder_matches ]).reshape(-1, 2)
 	orgSrc, orgDst = orgKeypoints(src_pts, dst_pts, H1, H2)
-	# drawOrg(cv2.imread(rgbFile1), cv2.imread(rgbFile2), orgSrc, orgDst) # Reproject matches to perspective View
+	
 	return orgSrc, orgDst
 
 
@@ -304,7 +304,7 @@ def getPerspKeypoints(rgbFile1, rgbFile2, HFile1, HFile2, model, device):
 	# cv2.waitKey()
 
 	orgSrc, orgDst = orgKeypoints(pos_a, pos_b, H1, H2)
-	# drawOrg(cv2.imread(rgbFile1), cv2.imread(rgbFile2), orgSrc, orgDst) # Reproject matches to perspective View
+	drawOrg(cv2.imread(rgbFile1), cv2.imread(rgbFile2), orgSrc, orgDst) # Reproject matches to perspective View
 
 	return orgSrc, orgDst
 
@@ -455,7 +455,7 @@ def getPerspKeypoints2(model1, model2, rgbFile1, rgbFile2, HFile1, HFile2, devic
 
 
 	orgSrc, orgDst = orgKeypoints(pos_a, pos_b, H1, H2)
-	# drawOrg(cv2.imread(rgbFile1), cv2.imread(rgbFile2), orgSrc, orgDst)
+	drawOrg(cv2.imread(rgbFile1), cv2.imread(rgbFile2), orgSrc, orgDst)
 
 	return orgSrc, orgDst
 
@@ -514,7 +514,7 @@ def super_point_matcher(matcher, rgbFile1, rgbFile2, HFile1, HFile2, device):
 	# pos_b = pos_b[inliers]
 
 	orgSrc, orgDst = orgKeypoints(pos_a, pos_b, H1, H2)
-	# drawOrg(cv2.imread(rgbFile1), cv2.imread(rgbFile2), orgSrc, orgDst)
+	drawOrg(cv2.imread(rgbFile1), cv2.imread(rgbFile2), orgSrc, orgDst)
 	return orgSrc, orgDst
 
 
