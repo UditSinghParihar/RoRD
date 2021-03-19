@@ -20,7 +20,7 @@ Rotation-Robust Descriptors and Orthographic Views for Local Feature Matching
 - [RoRD-Combined](add_link)
 - [D2-Net](https://dsmn.ml/files/d2-net/d2_tf.pth)
 
-## Evaluation on Diverse View
+## Evaluation on DiverseView Dataset  
 The DiverseView Dataset is a custom dataset consisting of 4 scenes with images having high-angle camera rotations and viewpoint changes.
 - RT estimation (single image pair):  
 `cd evaluation/demo/`  
