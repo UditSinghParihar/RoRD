@@ -6,7 +6,9 @@ import open3d as o3d
 from sys import argv
 from PIL import Image
 import math
-sys.path.append("../../../")
+
+sys.path.append("../../")
+
 from lib.extractMatchTop import getPerspKeypoints, getPerspKeypoints2, siftMatching, super_point_matcher
 import pandas as pd
 

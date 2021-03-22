@@ -1,2 +1,4 @@
 images/
 **__pycache__
+models/
+*.gitignore*

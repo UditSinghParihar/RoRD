@@ -8,8 +8,8 @@ from PIL import Image
 import math
 
 import torch
-sys.path.append("../")
 
+sys.path.append("../")
 from lib.extractMatchTop import getPerspKeypoints, getPerspKeypoints2, siftMatching, super_point_matcher
 from lib.model_test import D2Net
 
