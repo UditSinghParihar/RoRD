@@ -11,9 +11,6 @@ Rotation-Robust Descriptors and Orthographic Views for Local Feature Matching
 
 
 ## Pretrained Models
-<!-- - [RoRD](add_link)
-- [RoRD-Combined](add_link)
-- [D2-Net](https://dsmn.ml/files/d2-net/d2_tf.pth) -->
 
 Download models from [Google Drive](https://drive.google.com/file/d/1-5aLHyZ_qlHFNfRnDpXUh5egtf_XtoiA/view?usp=sharing) (73.9 MB)  
 
@@ -29,7 +26,8 @@ The DiverseView Dataset is a custom dataset consisting of 4 scenes with images h
 `python MatchIcp.py --rgb1 <path to rgb image 1> --rgb2 <path to rgb image 2> --depth1 <path to depth image 1> --depth2 <path to depth image 2> --model_rord <path to the model file RoRD>`  
 Example   
 `python MatchIcp.py --rgb1 rgb/rgb2_1.jpg --rgb2 rgb/rgb2_2.jpg --depth1 depth/depth2_1.png --depth2 depth/depth2_2.png --model_rord <path to the model file RoRD>`
-- Pose estimation (on query-database pairs)  
+- Pose estimation (on query-database pairs) using DiverseView dataset:  
+  
 `cd evaluation/DiverseViewDataset/RT_estimation/`  
 `python extractMatchICP.py --rgb_csv <csv file containing query-database rgb image pairs> --depth_csv <csv file containing query-database depth image pairs> --output_dir <path to the output directory> --camera_file <path to the camera intrinsics txt file> --model_rord <path to the model file RoRD>`
 
