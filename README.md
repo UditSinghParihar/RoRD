@@ -3,8 +3,7 @@ Rotation-Robust Descriptors and Orthographic Views for Local Feature Matching
 
 > [Project Page](https://uditsinghparihar.github.io/RoRD/) | [Paper link](https://arxiv.org/abs/2103.08573)
 
-<!-- <img src="demo//rgb/teaser.jpg" alt="pipeline" width="1000" height="220" />   -->
-
+<img src="assets/teaser2.jpg" alt="pipeline" width="1000" height="220" /> 
 
 ## Evaluation and Datasets
 
@@ -19,10 +18,9 @@ Download models from [Google Drive](https://drive.google.com/file/d/1-5aLHyZ_qlH
 
 ## Evaluating RoRD  
 You can evaluate RoRD on demo images or replace it with your custom images.  
-1. `cd demo`  
-2. `python extractMatch.py <rgb image 1> <rgb image2> --model_file  <path to the model file RoRD>`
-3. Example:  
-	`python extractMatch.py ../demo/rgb/rgb4_1.jpg ../demo/rgb/rgb4_2.jpg --model_file  ../models/rord.pth`  
+1. `python extractMatch.py <rgb_image1> <rgb_image2> --model_file  <path to the model file RoRD>`
+2. Example:  
+	`python extractMatch.py demo/rgb/rgb4_1.jpg demo/rgb/rgb4_2.jpg --model_file models/rord.pth`  
 
 ## DiverseView Dataset  
 
@@ -30,7 +28,7 @@ Download dataset from [Google Drive](https://drive.google.com/file/d/1BkhcHBKwcj
 
 ## Evaluation on DiverseView Dataset  
 The DiverseView Dataset is a custom dataset consisting of 4 scenes with images having high-angle camera rotations and viewpoint changes.  
-1. Pose estimation on single image pair:  
+1. Pose estimation on single image pair of DiverseView dataset:  
 	1. `cd demo`  
 	2. `python register.py --rgb1 <path to rgb image 1> --rgb2 <path to rgb image 2> --depth1 <path to depth image 1> --depth2 <path to depth image 2> --model_rord <path to the model file RoRD>`  
 	3. Example:   
@@ -40,6 +38,20 @@ The DiverseView Dataset is a custom dataset consisting of 4 scenes with images h
 	2. `python evalRT.py --rgb_csv <csv file containing query-database rgb image pairs> --depth_csv <csv file containing query-database depth image pairs> --output_dir <path to the output directory> --camera_file <path to the camera intrinsics txt file> --model_rord <path to the model file RoRD>`  
 
 
+## Training RoRD on PhotoTourism Images  
+1. Training using rotation homographies with initialization from D2Net weights (Download base models as mentioned in [Pretrained Models](#pretrained-models)).  
+
+2. Download branderburg_gate dataset that is used in the `configs/train_scenes_small.txt` from [here](https://www.cs.ubc.ca/research/kmyi_data/imw2020/TrainingData/brandenburg_gate.tar.gz)(5.3 Gb) in `phototourism` folder.  
+
+3. Folder stucture should be:  
+	```
+	phototourism/  
+	___ brandenburg_gate  
+	___ ___ dense  
+	___ ___	___ images  
+	```
+
+4. `python trainPT_ipr.py --dataset_path <path_to_phototourism_folder> --init_model models/d2net.pth  --plot`  
 
 ## Credits
 Our base model is borrowed from [D2-Net](https://github.com/mihaidusmanu/d2-net).  

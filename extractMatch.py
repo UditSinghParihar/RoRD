@@ -11,11 +11,11 @@ import time
 import scipy
 import scipy.io
 import scipy.misc
+import os
 import sys
 
-sys.path.append("../")
+# sys.path.append("../")
 
-import os
 from lib.model_test import D2Net
 from lib.utils import preprocess_image
 from lib.pyramid import process_multiscale
@@ -36,34 +36,35 @@ parser.add_argument(
 	help='image preprocessing (caffe or torch)'
 )
 
-WEIGHTS = 'models/rord.pth'
+# WEIGHTS = 'models/rord.pth'
 
 parser.add_argument(
-	'--model_file', type=str, default=WEIGHTS,
+	'--model_file', type=str,
 	help='path to the full model'
 )
-parser.add_argument(
-	'--max_edge', type=int, default=1600,
-	help='maximum image size at network input'
-)
-parser.add_argument(
-	'--max_sum_edges', type=int, default=2800,
-	help='maximum sum of image sizes at network input'
-)
+# parser.add_argument(
+# 	'--max_edge', type=int, default=1600,
+# 	help='maximum image size at network input'
+# )
+# parser.add_argument(
+# 	'--max_sum_edges', type=int, default=2800,
+# 	help='maximum sum of image sizes at network input'
+# )
 
-parser.add_argument(
-	'--output_extension', type=str, default='.d2-net',
-	help='extension for the output'
-)
-parser.add_argument(
-	'--output_type', type=str, default='npz',
-	help='output file type (npz or mat)'
-)
-parser.add_argument(
-	'--multiscale', dest='multiscale', action='store_true',
-	help='extract multiscale features'
-)
-parser.set_defaults(multiscale=False)
+# parser.add_argument(
+# 	'--output_extension', type=str, default='.d2-net',
+# 	help='extension for the output'
+# )
+# parser.add_argument(
+# 	'--output_type', type=str, default='npz',
+# 	help='output file type (npz or mat)'
+# )
+# parser.add_argument(
+# 	'--multiscale', dest='multiscale', action='store_true',
+# 	help='extract multiscale features'
+# )
+# parser.set_defaults(multiscale=False)
+
 parser.add_argument(
 	'--no-relu', dest='use_relu', action='store_false',
 	help='remove ReLU after the dense feature extraction module'
@@ -76,46 +77,47 @@ def extract(image, args, model, device):
 		image = image[:, :, np.newaxis]
 		image = np.repeat(image, 3, -1)
 
-	resized_image = image
-	if max(resized_image.shape) > args.max_edge:
-		resized_image = scipy.misc.imresize(
-			resized_image,
-			args.max_edge / max(resized_image.shape)
-		).astype('float')
-	if sum(resized_image.shape[: 2]) > args.max_sum_edges:
-		resized_image = scipy.misc.imresize(
-			resized_image,
-			args.max_sum_edges / sum(resized_image.shape[: 2])
-		).astype('float')
+	# resized_image = image
+	# if max(resized_image.shape) > args.max_edge:
+	# 	resized_image = scipy.misc.imresize(
+	# 		resized_image,
+	# 		args.max_edge / max(resized_image.shape)
+	# 	).astype('float')
+	# if sum(resized_image.shape[: 2]) > args.max_sum_edges:
+	# 	resized_image = scipy.misc.imresize(
+	# 		resized_image,
+	# 		args.max_sum_edges / sum(resized_image.shape[: 2])
+	# 	).astype('float')
 
-	fact_i = image.shape[0] / resized_image.shape[0]
-	fact_j = image.shape[1] / resized_image.shape[1]
+	# fact_i = image.shape[0] / resized_image.shape[0]
+	# fact_j = image.shape[1] / resized_image.shape[1]
 
 	input_image = preprocess_image(
-		resized_image,
+		# resized_image,
+		image,
 		preprocessing=args.preprocessing
 	)
 	with torch.no_grad():
-		if args.multiscale:
-			keypoints, scores, descriptors = process_multiscale(
-				torch.tensor(
-					input_image[np.newaxis, :, :, :].astype(np.float32),
-					device=device
-				),
-				model
-			)
-		else:
-			keypoints, scores, descriptors = process_multiscale(
-				torch.tensor(
-					input_image[np.newaxis, :, :, :].astype(np.float32),
-					device=device
-				),
-				model,
-				scales=[1]
-			)
+		# if args.multiscale:
+		# 	keypoints, scores, descriptors = process_multiscale(
+		# 		torch.tensor(
+		# 			input_image[np.newaxis, :, :, :].astype(np.float32),
+		# 			device=device
+		# 		),
+		# 		model
+		# 	)
+		# else:
+		keypoints, scores, descriptors = process_multiscale(
+			torch.tensor(
+				input_image[np.newaxis, :, :, :].astype(np.float32),
+				device=device
+			),
+			model,
+			scales=[1]
+		)
 
-	keypoints[:, 0] *= fact_i
-	keypoints[:, 1] *= fact_j
+	# keypoints[:, 0] *= fact_i
+	# keypoints[:, 1] *= fact_j
 	keypoints = keypoints[:, [1, 0, 2]]
 
 	feat = {}
@@ -171,48 +173,48 @@ def rordMatching(image1, image2, feat1, feat2, matcher="BF"):
 		plt.axis('off')
 		plt.show()
 
-	elif(matcher == "FLANN"):
+	# elif(matcher == "FLANN"):
 
-		FLANN_INDEX_KDTREE = 0
-		index_params = dict(algorithm = FLANN_INDEX_KDTREE, trees = 5)
-		search_params = dict(checks = 50)
+	# 	FLANN_INDEX_KDTREE = 0
+	# 	index_params = dict(algorithm = FLANN_INDEX_KDTREE, trees = 5)
+	# 	search_params = dict(checks = 50)
 
-		t0 = time.time()
-		flann = cv2.FlannBasedMatcher(index_params, search_params)
-		matches = flann.knnMatch(feat1['descriptors'], feat2['descriptors'],k=2)
-		t1 = time.time()
-		print("Time to extract matches: ", t1-t0)
+	# 	t0 = time.time()
+	# 	flann = cv2.FlannBasedMatcher(index_params, search_params)
+	# 	matches = flann.knnMatch(feat1['descriptors'], feat2['descriptors'],k=2)
+	# 	t1 = time.time()
+	# 	print("Time to extract matches: ", t1-t0)
 
-		print("Number of raw matches:", len(matches))
+	# 	print("Number of raw matches:", len(matches))
 
-		t0 = time.time()
-		good = []
-		for m, n in matches:
-			if m.distance < 0.9*n.distance:
-				good.append(m)
-		matches = good
-		t1 = time.time()
-		print("Time for outlier rejection: ", t1-t0)
-		print("Number of inliers: ", len(matches))
+	# 	t0 = time.time()
+	# 	good = []
+	# 	for m, n in matches:
+	# 		if m.distance < 0.9*n.distance:
+	# 			good.append(m)
+	# 	matches = good
+	# 	t1 = time.time()
+	# 	print("Time for outlier rejection: ", t1-t0)
+	# 	print("Number of inliers: ", len(matches))
 
-		match1 = [m.queryIdx for m in matches]
-		match2 = [m.trainIdx for m in matches]
+	# 	match1 = [m.queryIdx for m in matches]
+	# 	match2 = [m.trainIdx for m in matches]
 
-		keypoints_left = feat1['keypoints'][match1, : 2].T
-		keypoints_right = feat2['keypoints'][match2, : 2].T
+	# 	keypoints_left = feat1['keypoints'][match1, : 2].T
+	# 	keypoints_right = feat2['keypoints'][match2, : 2].T
 
-		for i in range(keypoints_left.shape[1]):
-			image1 = cv2.circle(image1, (int(keypoints_left[0, i]), int(keypoints_left[1, i])), 2, (0, 0, 255), 4)
-		for i in range(keypoints_right.shape[1]):
-			image2 = cv2.circle(image2, (int(keypoints_right[0, i]), int(keypoints_right[1, i])), 2, (0, 0, 255), 4)
+	# 	for i in range(keypoints_left.shape[1]):
+	# 		image1 = cv2.circle(image1, (int(keypoints_left[0, i]), int(keypoints_left[1, i])), 2, (0, 0, 255), 4)
+	# 	for i in range(keypoints_right.shape[1]):
+	# 		image2 = cv2.circle(image2, (int(keypoints_right[0, i]), int(keypoints_right[1, i])), 2, (0, 0, 255), 4)
 
-		im4 = cv2.hconcat([image1, image2])
+	# 	im4 = cv2.hconcat([image1, image2])
 
-		for i in range(keypoints_left.shape[1]):
-			im4 = cv2.line(im4, (int(keypoints_left[0, i]), int(keypoints_left[1, i])), (int(keypoints_right[0, i]) +  image1.shape[1], int(keypoints_right[1, i])), (0, 255, 0), 1)
+	# 	for i in range(keypoints_left.shape[1]):
+	# 		im4 = cv2.line(im4, (int(keypoints_left[0, i]), int(keypoints_left[1, i])), (int(keypoints_right[0, i]) +  image1.shape[1], int(keypoints_right[1, i])), (0, 255, 0), 1)
 
-		cv2.imshow("Image_lines", im4)
-		cv2.waitKey(0)
+	# 	cv2.imshow("Image_lines", im4)
+	# 	cv2.waitKey(0)
 
 
 def siftMatching(img1, img2):

@@ -2,3 +2,7 @@ images/
 **__pycache__
 models/
 *.gitignore*
+*README.md*
+*.swp
+*~
+checkpoints/

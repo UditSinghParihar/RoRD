@@ -16,8 +16,6 @@ from lib.utils import (
 	imshow_image
 )
 from lib.exceptions import NoGradientError, EmptyTensorError
-# import torchgeometry as tgm
-
 
 matplotlib.use('Agg')
 
@@ -30,9 +28,6 @@ def loss_function(
 		'image2': batch['image2'].to(device)
 	})
 	
-	# print('[INFO 1]', batch['image1'].shape, batch['image2'].shape, 
-	# 		output['dense_features1'].shape, output['dense_features2'].shape,
-	# 		output['scores1'].shape, output['scores2'].shape)
 	
 	loss = torch.tensor(np.array([0], dtype=np.float32), device=device)
 	has_grad = False
@@ -43,12 +38,10 @@ def loss_function(
 		dense_features1 = output['dense_features1'][idx_in_batch]
 		c, h1, w1 = dense_features1.size()
 		scores1 = output['scores1'][idx_in_batch].view(-1)
-		# print('[INFO 2]', dense_features1.shape, scores1.shape)
 
 		dense_features2 = output['dense_features2'][idx_in_batch]
 		_, h2, w2 = dense_features2.size()
 		scores2 = output['scores2'][idx_in_batch]
-		# print('[INFO 3]', dense_features2.shape, scores2.shape)
 
 		all_descriptors1 = F.normalize(dense_features1.view(c, -1), dim=0)
 		descriptors1 = all_descriptors1
@@ -56,9 +49,6 @@ def loss_function(
 		all_descriptors2 = F.normalize(dense_features2.view(c, -1), dim=0)
 
 		fmap_pos1 = grid_positions(h1, w1, device)
-
-		# hOrig, wOrig = int(batch['image1'].shape[2]/8), int(batch['image1'].shape[3]/8)
-		# fmap_pos1Orig = grid_positions(hOrig, wOrig, device)
 
 		pos1 = batch['pos1'][idx_in_batch].to(device)
 		pos2 = batch['pos2'][idx_in_batch].to(device)
@@ -103,8 +93,6 @@ def loss_function(
 			dim=1
 		)[0]
 
-		# negative_distance2 = semiHardMine(distance_matrix, is_out_of_safe_radius, positive_distance, margin)
-
 		all_fmap_pos1 = grid_positions(h1, w1, device)
 		position_distance = torch.max(
 			torch.abs(
@@ -121,8 +109,6 @@ def loss_function(
 			distance_matrix + (1 - is_out_of_safe_radius.float()) * 10.,
 			dim=1
 		)[0]
-
-		# negative_distance1 = semiHardMine(distance_matrix, is_out_of_safe_radius, positive_distance, margin)
 
 		diff = positive_distance - torch.min(
 			negative_distance1, negative_distance2
@@ -164,27 +150,6 @@ def idsAlign(pos1, device, h1, w1):
 	ids = torch.round(torch.Tensor(ids)).long().to(device)
 
 	return ids
-
-
-def semiHardMine(distance_matrix, is_out_of_safe_radius, positive_distance, margin):
-	negative_distances = distance_matrix + (1 - is_out_of_safe_radius.float()) * 10.
-	
-	negDist = []
-
-	for i, row in enumerate(negative_distances):
-		posDist = positive_distance[i]
-		
-		row = row[(posDist + margin > row) & (row > posDist)]
-		
-		if(row.size(0) == 0):
-			negDist.append(negative_distances[i, 0])
-		else:
-			perm = torch.randperm(row.size(0))
-			negDist.append(row[perm[0]])
-		
-	negDist = torch.Tensor(negDist).to(positive_distance.device)
-
-	return negDist
 
 
 def drawTraining(image1, image2, pos1, pos2, batch, idx_in_batch, output, save=False, plot_path="train_viz"):
