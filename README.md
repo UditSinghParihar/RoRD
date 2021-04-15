@@ -21,6 +21,15 @@ You can evaluate RoRD on demo images or replace it with your custom images.
 1. `python extractMatch.py <rgb_image1> <rgb_image2> --model_file  <path to the model file RoRD>`
 2. Example:  
 	`python extractMatch.py demo/rgb/rgb1_1.jpg demo/rgb/rgb1_2.jpg --model_file models/rord.pth --sift`  
+3. This should give you output like this:  
+
+#### RoRD  
+<img src="assets/rord_extract.jpg" alt="pipeline" width="600" height="220" />   
+
+#### SIFT  
+<img src="assets/sift_extract.jpg" alt="pipeline" width="600" height="220" />  
+
+
 
 ## DiverseView Dataset  
 
@@ -33,6 +42,12 @@ The DiverseView Dataset is a custom dataset consisting of 4 scenes with images h
 	2. `python register.py --rgb1 <path to rgb image 1> --rgb2 <path to rgb image 2> --depth1 <path to depth image 1> --depth2 <path to depth image 2> --model_rord <path to the model file RoRD>`  
 	3. Example:   
 		`python register.py --rgb1 rgb/rgb2_1.jpg --rgb2 rgb/rgb2_2.jpg --depth1 depth/depth2_1.png --depth2 depth/depth2_2.png --model_rord ../models/rord.pth`  
+	4. This should give you output like this:  
+
+#### RoRD  
+<img src="assets/rord_register.jpg" alt="pipeline" width="600" height="220" />  
+
+
 2. Pose estimation on a sequence of DiverseView dataset:  
 	1. `cd evaluation/DiverseView/`  
 	2. `python evalRT.py --rgb_csv <csv file containing query-database rgb image pairs> --depth_csv <csv file containing query-database depth image pairs> --output_dir <path to the output directory> --camera_file <path to the camera intrinsics txt file> --model_rord <path to the model file RoRD>`  
