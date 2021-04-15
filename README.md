@@ -20,7 +20,7 @@ Download models from [Google Drive](https://drive.google.com/file/d/1-5aLHyZ_qlH
 You can evaluate RoRD on demo images or replace it with your custom images.  
 1. `python extractMatch.py <rgb_image1> <rgb_image2> --model_file  <path to the model file RoRD>`
 2. Example:  
-	`python extractMatch.py demo/rgb/rgb4_1.jpg demo/rgb/rgb4_2.jpg --model_file models/rord.pth`  
+	`python extractMatch.py demo/rgb/rgb1_1.jpg demo/rgb/rgb1_2.jpg --model_file models/rord.pth --sift`  
 
 ## DiverseView Dataset  
 
