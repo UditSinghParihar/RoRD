@@ -49,7 +49,9 @@ The DiverseView Dataset is a custom dataset consisting of 4 scenes with images h
 	___ brandenburg_gate  
 	___ ___ dense  
 	___ ___	___ images  
-	```
+	___ ___	___ stereo  
+	___ ___	___ sparse  
+	```  
 
 4. `python trainPT_ipr.py --dataset_path <path_to_phototourism_folder> --init_model models/d2net.pth  --plot`  
 
