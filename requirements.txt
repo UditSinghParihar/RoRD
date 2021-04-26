@@ -1,0 +1,11 @@
+torch==1.7.0
+torchvision==0.8.1
+opencv-python==3.4.2.16
+opencv-contrib-python==3.4.2.16
+pydegensac
+tqdm
+imageio
+scipy
+numpy
+scikit-image
+open3d==0.9.0.0
