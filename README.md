@@ -1,5 +1,5 @@
 # RoRD: Rotation-Robust Descriptors and Orthographic Views for Local Feature Matching  
-#### Udit Singh Parihar<sup>\*1</sup>, Aniket Gujarathi<sup>\*1</sup>, Kinal Mehta<sup>\*1</sup>, Satyajit Tourani<sup>\*1</sup>, Sourav Garg<sup>2</sup>, Michael Milford<sup>2</sup> and K. Madhava Krishna<sup>1</sup>  
+#### [Udit Singh Parihar](https://www.linkedin.com/in/udit-singh-parihar-0bab24b7/)<sup>\*1</sup>, [Aniket Gujarathi](https://www.linkedin.com/in/aniket-gujarathi/?originalSubdomain=in)<sup>\*1</sup>, [Kinal Mehta](https://kinalmehta.github.io/)<sup>\*1</sup>, [Satyajit Tourani](https://scholar.google.com/citations?user=943lKscAAAAJ&hl=en)<sup>\*1</sup>, [Sourav Garg](https://www.linkedin.com/in/gargsourav/)<sup>2</sup>, [Michael Milford](https://www.linkedin.com/in/michaeljmilford/)<sup>2</sup> and [K. Madhava Krishna](https://robotics.iiit.ac.in/)<sup>1</sup>  
 
 
 <sup>\*</sup> Denotes Equal Contribution  
