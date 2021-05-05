@@ -156,7 +156,6 @@ def cv2D2netMatching(image1, image2, feat1, feat2, matcher="BF"):
 
 
 def siftMatching(img1, img2, HFile1, HFile2, device):
-
 	H1 = np.load(HFile1)
 	H2 = np.load(HFile2)
 
@@ -208,7 +207,7 @@ def siftMatching(img1, img2, HFile1, HFile2, device):
 	placeholder_matches = [cv2.DMatch(idx, idx, 1) for idx in range(n_inliers)]
 
 	#### Visualization ####
-	# image3 = cv2.drawMatches(img1, inlier_keypoints_left, img2, inlier_keypoints_right, placeholder_matches, None)
+	image3 = cv2.drawMatches(img1, inlier_keypoints_left, img2, inlier_keypoints_right, placeholder_matches, None)
 	# cv2.imshow('Matches', image3)
 	# cv2.waitKey()
 
@@ -216,7 +215,7 @@ def siftMatching(img1, img2, HFile1, HFile2, device):
 	dst_pts = np.float32([ inlier_keypoints_right[m.trainIdx].pt for m in placeholder_matches ]).reshape(-1, 2)
 	orgSrc, orgDst = orgKeypoints(src_pts, dst_pts, H1, H2)
 	
-	return orgSrc, orgDst
+	return orgSrc, orgDst, image3
 
 
 def getTopImg(image, H, imgSize=400):
@@ -258,8 +257,10 @@ def drawOrg(image1, image2, orgSrc, orgDst):
 	for i in range(orgSrc.shape[1]):
 		im4 = cv2.line(im4, (int(orgSrc[0, i]), int(orgSrc[1, i])), (int(orgDst[0, i]) +  im1.shape[1], int(orgDst[1, i])), (0, 255, 0), 1)
 	im4 = cv2.cvtColor(im4, cv2.COLOR_BGR2RGB)
-	cv2.imshow("Image", im4)
-	cv2.waitKey(0)
+	# cv2.imshow("Image", im4)
+	# cv2.waitKey(0)
+
+	return im4
 
 
 
@@ -304,9 +305,9 @@ def getPerspKeypoints(rgbFile1, rgbFile2, HFile1, HFile2, model, device):
 	# cv2.waitKey()
 
 	orgSrc, orgDst = orgKeypoints(pos_a, pos_b, H1, H2)
-	drawOrg(cv2.imread(rgbFile1), cv2.imread(rgbFile2), orgSrc, orgDst) # Reproject matches to perspective View
+	matchImg = drawOrg(cv2.imread(rgbFile1), cv2.imread(rgbFile2), orgSrc, orgDst) # Reproject matches to perspective View
 
-	return orgSrc, orgDst
+	return orgSrc, orgDst, matchImg
 
 
 ###### Ensemble
@@ -455,9 +456,9 @@ def getPerspKeypoints2(model1, model2, rgbFile1, rgbFile2, HFile1, HFile2, devic
 
 
 	orgSrc, orgDst = orgKeypoints(pos_a, pos_b, H1, H2)
-	drawOrg(cv2.imread(rgbFile1), cv2.imread(rgbFile2), orgSrc, orgDst)
+	matchImg = drawOrg(cv2.imread(rgbFile1), cv2.imread(rgbFile2), orgSrc, orgDst)
 
-	return orgSrc, orgDst
+	return orgSrc, orgDst, matchImg
 
 ##### SuperPoint
 
@@ -514,8 +515,8 @@ def super_point_matcher(matcher, rgbFile1, rgbFile2, HFile1, HFile2, device):
 	# pos_b = pos_b[inliers]
 
 	orgSrc, orgDst = orgKeypoints(pos_a, pos_b, H1, H2)
-	drawOrg(cv2.imread(rgbFile1), cv2.imread(rgbFile2), orgSrc, orgDst)
-	return orgSrc, orgDst
+	matchImg = drawOrg(cv2.imread(rgbFile1), cv2.imread(rgbFile2), orgSrc, orgDst)
+	return orgSrc, orgDst, matchImg
 
 
 if __name__ == '__main__':

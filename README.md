@@ -22,7 +22,7 @@ You can evaluate RoRD on demo images or replace it with your custom images.
 	1. `pip install -r requirements.txt`  
 2. `python extractMatch.py <rgb_image1> <rgb_image2> --model_file  <path to the model file RoRD>`
 3. Example:  
-	`python extractMatch.py demo/rgb/rgb1_1.jpg demo/rgb/rgb1_2.jpg --model_file models/rord.pth --sift`  
+	`python extractMatch.py demo/rgb/rgb1_1.jpg demo/rgb/rgb1_2.jpg --model_file models/rord.pth`  
 4. This should give you output like this:  
 
 #### RoRD  
@@ -52,7 +52,9 @@ The DiverseView Dataset is a custom dataset consisting of 4 scenes with images h
 
 2. Pose estimation on a sequence of DiverseView dataset:  
 	1. `cd evaluation/DiverseView/`  
-	2. `python evalRT.py --rgb_csv <csv file containing query-database rgb image pairs> --depth_csv <csv file containing query-database depth image pairs> --output_dir <path to the output directory> --camera_file <path to the camera intrinsics txt file> --model_rord <path to the model file RoRD>`  
+	2. `python evalRT.py --dataset <path to DiverseView dataset> --sequence <sequence name> --model_rord <path to RoRD model> --output_dir <name of output dir>`  
+	3. Example:  
+		3. `python evalRT.py --dataset /path/to/preprocessed/ --sequence data1 --model_rord ../../models/rord.pth --output_dir out`  
 
 
 ## Training RoRD on PhotoTourism Images  
@@ -72,8 +74,15 @@ The DiverseView Dataset is a custom dataset consisting of 4 scenes with images h
 
 4. `python trainPT_ipr.py --dataset_path <path_to_phototourism_folder> --init_model models/d2net.pth  --plot`  
 
+
+## TO-DO
+- [ ] Provide VPR code
+- [ ] Provide combine training of RoRD + D2Net
+
+
 ## Credits
 Our base model is borrowed from [D2-Net](https://github.com/mihaidusmanu/d2-net).  
+
 
 ## BibTex
 If you use this code in your project, please cite the following paper:
