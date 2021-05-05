@@ -8,3 +8,4 @@ models/
 checkpoints/
 .nfs00000000141306b30000004a
 evaluation/DiverseView/out/
+*.pcd

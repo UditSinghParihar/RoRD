@@ -46,15 +46,28 @@ The DiverseView Dataset is a custom dataset consisting of 4 scenes with images h
 		`python register.py --rgb1 rgb/rgb2_1.jpg --rgb2 rgb/rgb2_2.jpg --depth1 depth/depth2_1.png --depth2 depth/depth2_2.png --model_rord ../models/rord.pth`  
 	4. This should give you output like this:  
 
-#### RoRD  
-<img src="assets/rord_register.jpg" alt="pipeline" width="600" height="220" />  
+#### RoRD matches in perspective view  
+<img src="assets/register_persp.jpg" alt="pipeline" width="600" height="220" />  
+
+#### RoRD matches in orthographic view  
+<img src="assets/register_ortho.jpg" alt="pipeline" width="600" height="220" />  
 
 
-2. Pose estimation on a sequence of DiverseView dataset:  
+2. To visualize the registered point cloud, use `--viz3d command`:  
+	1. `python register.py --rgb1 rgb/rgb2_1.jpg --rgb2 rgb/rgb2_2.jpg --depth1 depth/depth2_1.png --depth2 depth/depth2_2.png --model_rord ../models/rord.pth --viz3d`  
+
+#### PointCloud registration using correspondences  
+<img src="assets/register_pointcloud.jpg" alt="pipeline" width="600" height="400" />  
+
+3. Pose estimation on a sequence of DiverseView dataset:  
 	1. `cd evaluation/DiverseView/`  
 	2. `python evalRT.py --dataset <path to DiverseView dataset> --sequence <sequence name> --model_rord <path to RoRD model> --output_dir <name of output dir>`  
 	3. Example:  
-		3. `python evalRT.py --dataset /path/to/preprocessed/ --sequence data1 --model_rord ../../models/rord.pth --output_dir out`  
+		1. `python evalRT.py --dataset /path/to/preprocessed/ --sequence data1 --model_rord ../../models/rord.pth --output_dir out`  
+	4. This would generate `out` folder containing predicted transformations and matching results in `out/vis` folder, containing images like below:
+
+#### RoRD  
+<img src="assets/rord_evalRT.jpg" alt="pipeline" width="600" height="220" /> 
 
 
 ## Training RoRD on PhotoTourism Images  
@@ -76,8 +89,9 @@ The DiverseView Dataset is a custom dataset consisting of 4 scenes with images h
 
 
 ## TO-DO
-- [ ] Provide VPR code
-- [ ] Provide combine training of RoRD + D2Net
+- [ ] Provide VPR code  
+- [ ] Provide combine training of RoRD + D2Net  
+- [ ] Provide code for calculating error in Diverseview Dataset  
 
 
 ## Credits

@@ -12,7 +12,7 @@ import cv2
 
 sys.path.append("../../")
 
-from lib.extractMatchTop import getPerspKeypoints, getPerspKeypoints2, siftMatching, super_point_matcher
+from lib.extractMatchTop import getPerspKeypoints, getPerspKeypoints2, siftMatching
 import pandas as pd
 
 
@@ -57,12 +57,7 @@ parser.add_argument(
 )
 
 parser.add_argument(
-	'--superpoint', action='store_true',
-	help='SuperPoint evaluation'
-) ### Use the SuperGlue repository
-
-parser.add_argument(
-	'--viz', action='store_true',
+	'--viz3d', action='store_true',
 	help='visualize the pointcloud registrations'
 )
 
@@ -71,6 +66,10 @@ parser.add_argument(
 	help='Matched image logging interval'
 )
 
+parser.add_argument(
+	'--camera_file', type=str, default='../../configs/camera.txt',
+	help='path to the camera intrinsics file. In order: focal_x, focal_y, center_x, center_y, scaling_factor.'
+)
 
 args = parser.parse_args()
 
@@ -200,7 +199,7 @@ def get3dCor(src, trg):
 	return corr
 
 if __name__ == "__main__":
-	camera_file = args.dataset + 'camera.txt'
+	camera_file = args.camera_file
 	rgb_csv = args.dataset + args.sequence + '/rtImagesRgb.csv'
 	depth_csv = args.dataset + args.sequence + '/rtImagesDepth.csv'
 
@@ -245,22 +244,6 @@ if __name__ == "__main__":
 				srcPts, trgPts, matchImg = getPerspKeypoints2(model1, model2, srcImg, trgImg, srcH, trgH, device)
 			elif args.sift:
 				srcPts, trgPts, matchImg = siftMatching(srcImg, trgImg, srcH, trgH, device)
-			elif args.superpoint:
-				from SuperGluePretrainedNetwork.models.matching import Matching
-				config = {
-					'superpoint': {
-						'nms_radius': 4,
-						'keypoint_threshold': 0.005,
-						'max_keypoints': 1024
-					},
-					'superglue': {
-						'weights': 'outdoor',
-						'sinkhorn_iterations': 20,
-						'match_threshold': 0.2,
-					}
-				}
-				matching = Matching(config).eval().to(device)
-				srcPts, trgPts, matchImg = super_point_matcher(matching, srcImg, trgImg, srcH, trgH, device)
 
 			if(isinstance(srcPts, list) == True):
 				print(np.identity(4))
@@ -290,13 +273,13 @@ if __name__ == "__main__":
 			# print(trans_init)
 			filter_list.append(trans_init)
 
-			if args.viz:
+			if args.viz3d:
 				o3d.visualization.draw_geometries(srcSph)
 				o3d.visualization.draw_geometries(trgSph)
 				draw_registration_result(srcCld, trgCld, trans_init)
 
 			if(dbId%args.log_interval == 0):
-				cv2.imwrite(os.path.join(args.output_dir, 'vis') + "/matchImg.%02d.%02d.png"%(queryId, dbId//args.log_interval), matchImg)
+				cv2.imwrite(os.path.join(args.output_dir, 'vis') + "/matchImg.%02d.%02d.jpg"%(queryId, dbId//args.log_interval), matchImg)
 			
 			dbId += 1
 

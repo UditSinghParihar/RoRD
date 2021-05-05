@@ -23,64 +23,6 @@ from skimage.transform import ProjectiveTransform, AffineTransform
 import pydegensac
 
 
-def extract(image, model, model2, device, multiscale=False, preprocessing='caffe'):
-	resized_image = image
-
-	fact_i = image.shape[0] / resized_image.shape[0]
-	fact_j = image.shape[1] / resized_image.shape[1]
-
-	input_image = preprocess_image(
-		resized_image,
-		preprocessing=preprocessing
-	)
-	with torch.no_grad():
-		if multiscale:
-			keypoints, scores, descriptors = process_multiscale(
-				torch.tensor(
-					input_image[np.newaxis, :, :, :].astype(np.float32),
-					device=device
-				),
-				model
-			)
-		else:
-			keypoints, scores, descriptors = process_multiscale(
-				torch.tensor(
-					input_image[np.newaxis, :, :, :].astype(np.float32),
-					device=device
-				),
-				model,
-				scales=[1]
-			)
-
-			keypoints2, scores2, descriptors2 = process_multiscale(
-				torch.tensor(
-					input_image[np.newaxis, :, :, :].astype(np.float32),
-					device=device
-				),
-				model2,
-				scales=[1]
-			)
-
-	keypoints[:, 0] *= fact_i
-	keypoints[:, 1] *= fact_j
-	keypoints = keypoints[:, [1, 0, 2]]
-
-	keypoints2[:, 0] *= fact_i
-	keypoints2[:, 1] *= fact_j
-	keypoints2 = keypoints2[:, [1, 0, 2]]
-
-	keypoints_b = np.concatenate([keypoints, keypoints2], 0)
-	scores_b = np.concatenate([scores, scores2], 0)
-	descriptors_b = np.concatenate([descriptors, descriptors2], 0)
-
-	feat = {}
-	feat['keypoints'] = keypoints_b
-	feat['scores'] = scores_b
-	feat['descriptors'] = descriptors_b
-
-	return feat
-
-
 def extractSingle(image, model, device):
 
 	with torch.no_grad():
@@ -98,61 +40,6 @@ def extractSingle(image, model, device):
 	feat['descriptors'] = descriptors
 
 	return feat
-
-def cv2D2netMatching(image1, image2, feat1, feat2, matcher="BF"):
-	if(matcher == "BF"):
-
-		t0 = time.time()
-		bf = cv2.BFMatcher(cv2.NORM_L2, crossCheck=True)
-		matches = bf.match(feat1['descriptors'], feat2['descriptors'])
-		matches = sorted(matches, key=lambda x:x.distance)
-		t1 = time.time()
-		print("Time to extract matches: ", t1-t0)
-
-		print("Number of raw matches:", len(matches))
-
-		match1 = [m.queryIdx for m in matches]
-		match2 = [m.trainIdx for m in matches]
-
-		keypoints_left = feat1['keypoints'][match1, : 2]
-		keypoints_right = feat2['keypoints'][match2, : 2]
-
-		np.random.seed(0)
-
-		t0 = time.time()
-
-		### Ransac ###
-		# model, inliers = ransac(
-		# 	(keypoints_left, keypoints_right),
-		# 	AffineTransform, min_samples=4,
-		# 	residual_threshold=8, max_trials=10000
-		# )
-		####
-
-		H, inliers = pydegensac.findHomography(keypoints_left, keypoints_right, 8.0, 0.99, 10000)
-
-		t1 = time.time()
-		print("Time for ransac: ", t1-t0)
-
-		n_inliers = np.sum(inliers)
-		print('Number of inliers: %d.' % n_inliers)
-
-		inlier_keypoints_left = [cv2.KeyPoint(point[0], point[1], 1) for point in keypoints_left[inliers]]
-		inlier_keypoints_right = [cv2.KeyPoint(point[0], point[1], 1) for point in keypoints_right[inliers]]
-		placeholder_matches = [cv2.DMatch(idx, idx, 1) for idx in range(n_inliers)]
-
-		image3 = cv2.drawMatches(image1, inlier_keypoints_left, image2, inlier_keypoints_right, placeholder_matches, None)
-
-		#### Visualization ####
-		# plt.figure(figsize=(20, 20))
-		# plt.imshow(image3)
-		# plt.axis('off')
-		# plt.show()
-
-		src_pts = np.float32([ inlier_keypoints_left[m.queryIdx].pt for m in placeholder_matches ]).reshape(-1, 2)
-		dst_pts = np.float32([ inlier_keypoints_right[m.trainIdx].pt for m in placeholder_matches ]).reshape(-1, 2)
-
-		return src_pts, dst_pts
 
 
 def siftMatching(img1, img2, HFile1, HFile2, device):
@@ -216,14 +103,6 @@ def siftMatching(img1, img2, HFile1, HFile2, device):
 	orgSrc, orgDst = orgKeypoints(src_pts, dst_pts, H1, H2)
 	
 	return orgSrc, orgDst, image3
-
-
-def getTopImg(image, H, imgSize=400):
-	warpImg = cv2.warpPerspective(image, H, (imgSize, imgSize))
-	cv2.imshow("Image", cv2.cvtColor(warpImg, cv2.COLOR_BGR2RGB))
-	cv2.waitKey(0)
-
-	return warpImg
 
 
 def orgKeypoints(src_pts, dst_pts, H1, H2):
@@ -307,7 +186,7 @@ def getPerspKeypoints(rgbFile1, rgbFile2, HFile1, HFile2, model, device):
 	orgSrc, orgDst = orgKeypoints(pos_a, pos_b, H1, H2)
 	matchImg = drawOrg(cv2.imread(rgbFile1), cv2.imread(rgbFile2), orgSrc, orgDst) # Reproject matches to perspective View
 
-	return orgSrc, orgDst, matchImg
+	return orgSrc, orgDst, matchImg, image3
 
 
 ###### Ensemble
@@ -346,13 +225,6 @@ def mnn_matcher(descriptors_a, descriptors_b):
 	matches = torch.stack([ids1[mask], nn12[mask]])
 	return matches.t().data.cpu().numpy()
 
-def apply_ransac(kp1, kp2):
-	model, inliers = ransac(
-		(kp1, kp2),
-		AffineTransform, min_samples=4,
-		residual_threshold=8, max_trials=10000
-	)
-	return kp1[inliers], kp2[inliers], inliers
 
 def getPerspKeypoints2(model1, model2, rgbFile1, rgbFile2, HFile1, HFile2, device):
 	if HFile1 is None:
@@ -458,70 +330,12 @@ def getPerspKeypoints2(model1, model2, rgbFile1, rgbFile2, HFile1, HFile2, devic
 	orgSrc, orgDst = orgKeypoints(pos_a, pos_b, H1, H2)
 	matchImg = drawOrg(cv2.imread(rgbFile1), cv2.imread(rgbFile2), orgSrc, orgDst)
 
-	return orgSrc, orgDst, matchImg
-
-##### SuperPoint
-
-def frame2tensor(frame, device):
-    return torch.from_numpy(frame/255.).float()[None, None].to(device)
-
-def read_and_process_image_superpoint(img_path, device, resize=None, H=None, h=None, w=None):
-    img1 = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE)
-    img1 = np.array(img1)
-
-    if H is not None:
-        img1 = cv2.warpPerspective(img1, H, dsize=(400,400))
-
-    igp1 = frame2tensor(img1, device)
-    return igp1
-
-def super_point_matcher(matcher, rgbFile1, rgbFile2, HFile1, HFile2, device):
-
-	H1 = np.load(HFile1)
-	H2 = np.load(HFile2)
-	# igp1 = read_and_process_image_superpoint(rgbFile1, device, H=None)#, resize=(400, 400))
-	igp1 = read_and_process_image_superpoint(rgbFile1, device, H=H1)#, resize=(400, 400))
-	# c,h,w = igp1.shape
-	# igp2 = read_and_process_image_superpoint(rgbFile2, device, H=None)#, resize=(400, 400))
-	igp2 = read_and_process_image_superpoint(rgbFile2, device, H=H2)#, resize=(400, 400))
-
-	with torch.no_grad():
-		pred = matcher({'image0': igp1, 'image1': igp2})
-		pred = {k: v[0].cpu().numpy() for k, v in pred.items()}
-
-		keypoints_a, descriptors_a, scores_a = pred['keypoints0'], pred['descriptors0'].T, pred['scores0']
-		keypoints_b, descriptors_b, scores_b = pred['keypoints1'], pred['descriptors1'].T, pred['scores1']
-		matches1 = pred['matches0']
-		matches2 = pred['matches1']
-
-		matches1_mask = matches1!=-1
-		matches2_mask = matches2!=-1
-		indcs = np.arange(0,len(matches1))
-
-		mat_indcs = indcs[matches1_mask]
-		final_matches1 = matches1[matches1_mask]
-		matches_sg = np.stack((mat_indcs, final_matches1), 1)
-
-	matches_nn = mnn_matcher(
-		torch.from_numpy(descriptors_a).to(device=device),
-		torch.from_numpy(descriptors_b).to(device=device)
-	)
-
-	pos_a = keypoints_a[matches_sg[:, 0], : 2]
-	pos_b = keypoints_b[matches_sg[:, 1], : 2]
-
-	# H, inliers = pydegensac.findHomography(pos_a, pos_b, 8.0, 0.99, 10000)
-	# pos_a = pos_a[inliers]
-	# pos_b = pos_b[inliers]
-
-	orgSrc, orgDst = orgKeypoints(pos_a, pos_b, H1, H2)
-	matchImg = drawOrg(cv2.imread(rgbFile1), cv2.imread(rgbFile2), orgSrc, orgDst)
-	return orgSrc, orgDst, matchImg
+	return orgSrc, orgDst, matchImg, image3
 
 
 if __name__ == '__main__':
-	WEIGHTS = '/home/udit/udit/d2-net/models/d2_kinal_ipr.pth'
-	#WEIGHTS = '/home/udit/d2-net/models/d2_tf.pth'
+	WEIGHTS = '../models/rord.pth'
+	
 	srcR = argv[1]
 	trgR = argv[2]
 	srcH = argv[3]

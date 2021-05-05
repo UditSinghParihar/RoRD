@@ -6,11 +6,11 @@ import open3d as o3d
 from sys import argv
 from PIL import Image
 import math
-
+import cv2
 import torch
 
 sys.path.append("../")
-from lib.extractMatchTop import getPerspKeypoints, getPerspKeypoints2, siftMatching, super_point_matcher
+from lib.extractMatchTop import getPerspKeypoints, getPerspKeypoints2, siftMatching
 from lib.model_test import D2Net
 
 #### Cuda ####
@@ -21,83 +21,76 @@ device = torch.device('cuda:0' if use_cuda else 'cpu')
 parser = argparse.ArgumentParser(description='RoRD ICP evaluation')
 
 parser.add_argument(
-    '--rgb1', type=str, required=True,
-    help='path to the rgb image1'
+	'--rgb1', type=str, required=True,
+	help='path to the rgb image1'
 )
 parser.add_argument(
-    '--rgb2', type=str, required=True,
-    help='path to the rgb image2'
-)
-
-parser.add_argument(
-    '--depth1', type=str, required=True,
-    help='path to the rgb image2'
+	'--rgb2', type=str, required=True,
+	help='path to the rgb image2'
 )
 
 parser.add_argument(
-    '--depth2', type=str, required=True,
-    help='path to the rgb image2'
+	'--depth1', type=str, required=True,
+	help='path to the rgb image2'
 )
 
 parser.add_argument(
-    '--model_rord', type=str,
-    help='path to the RoRD model for evaluation'
+	'--depth2', type=str, required=True,
+	help='path to the rgb image2'
 )
 
 parser.add_argument(
-    '--model_d2', type=str,
-    help='path to the vanilla D2-Net model for evaluation'
+	'--model_rord', type=str,
+	help='path to the RoRD model for evaluation'
 )
 
 parser.add_argument(
-    '--model_ens', action='store_true',
-    help='ensemble model of RoRD + D2-Net'
+	'--model_d2', type=str,
+	help='path to the vanilla D2-Net model for evaluation'
 )
 
 parser.add_argument(
-    '--sift', action='store_true',
-    help='Sift'
+	'--model_ens', action='store_true',
+	help='ensemble model of RoRD + D2-Net'
 )
 
 parser.add_argument(
-    '--superpoint', action='store_true',
-    help='SuperPoint evaluation'
-) ### Use the SuperGlue repository
-
-parser.add_argument(
-    '--camera_file', type=str, default='/home/udit/d2-net/camera.txt',
-    help='path to the camera intrinsics file. In order: focal_x, focal_y, center_x, center_y, scaling_factor.'
+	'--sift', action='store_true',
+	help='Sift'
 )
 
 parser.add_argument(
-    '--viz', action='store_true',
-    help='visualize the pointcloud registrations'
+	'--camera_file', type=str, default='../configs/camera.txt',
+	help='path to the camera intrinsics file. In order: focal_x, focal_y, center_x, center_y, scaling_factor.'
+)
+
+parser.add_argument(
+	'--viz3d', action='store_true',
+	help='visualize the pointcloud registrations'
 )
 
 args = parser.parse_args()
 
 if args.model_ens: # Change default paths accordingly for ensemble
-	model1_ens = '/home/udit/udit/d2-net/models/d2_kinal_ipr.pth' # rord
-	model2_ens = '/home/udit/udit/d2-net/models/d2_tf.pth' # vanilla d2-net
+	model1_ens = '../../models/rord.pth'
+	model2_ens = '../../models/d2net.pth'
 
 def draw_registration_result(source, target, transformation):
 	source_temp = copy.deepcopy(source)
 	target_temp = copy.deepcopy(target)
-	# source_temp.paint_uniform_color([1, 0.706, 0])
-	# target_temp.paint_uniform_color([0, 0.651, 0.929])
 	source_temp.transform(transformation)
 
 	target_temp += source_temp
-	print("Added PointCloud.")
+	# print("Saved registered PointCloud.")
+	# o3d.io.write_point_cloud("registered.pcd", target_temp)
 
 	trgSph.append(source_temp); trgSph.append(target_temp)
 	axis1 = o3d.geometry.TriangleMesh.create_coordinate_frame(size=0.5, origin=[0, 0, 0])
 	axis2 = o3d.geometry.TriangleMesh.create_coordinate_frame(size=0.5, origin=[0, 0, 0])
 	axis2.transform(transformation)
 	trgSph.append(axis1); trgSph.append(axis2)
-	# o3d.visualization.draw_geometries(trgSph)
-
-	o3d.io.write_point_cloud("/scratch/udit/realsense/VideoMedia/pointclouds/tf+ov/Data2/0-1394.pcd", target_temp)
+	print("Showing registered PointCloud.")
+	o3d.visualization.draw_geometries(trgSph)
 
 
 def readDepth(depthFile):
@@ -108,16 +101,16 @@ def readDepth(depthFile):
 	return np.asarray(depth)
 
 def readCamera(camera):
-    with open (camera, "rt") as file:
-        contents = file.read().split()
+	with open (camera, "rt") as file:
+		contents = file.read().split()
 
-    focalX = float(contents[0])
-    focalY = float(contents[1])
-    centerX = float(contents[2])
-    centerY = float(contents[3])
-    scalingFactor = float(contents[4])
+	focalX = float(contents[0])
+	focalY = float(contents[1])
+	centerX = float(contents[2])
+	centerY = float(contents[3])
+	scalingFactor = float(contents[4])
 
-    return focalX, focalY, centerX, centerY, scalingFactor
+	return focalX, focalY, centerX, centerY, scalingFactor
 
 def getPointCloud(rgbFile, depthFile, pts):
 	thresh = 15.0
@@ -229,34 +222,23 @@ if __name__ == "__main__":
 	model2 = model2.to(device)
 
 	if args.model_rord:
-		srcPts, trgPts = getPerspKeypoints(args.rgb1, args.rgb2, srcH, trgH, model2, device)
+		srcPts, trgPts, matchImg, matchImgOrtho = getPerspKeypoints(args.rgb1, args.rgb2, srcH, trgH, model2, device)
 	elif args.model_d2:
-		srcPts, trgPts = getPerspKeypoints(args.rgb1, args.rgb2, srcH, trgH, model1, device)
+		srcPts, trgPts, matchImg, matchImgOrtho = getPerspKeypoints(args.rgb1, args.rgb2, srcH, trgH, model1, device)
 	elif args.model_ens:
 		model1 = D2Net(model_file=model1_ens)
 		model1 = model1.to(device)
 		model2 = D2Net(model_file=model2_ens)
 		model2 = model2.to(device)
-		srcPts, trgPts = getPerspKeypoints2(model1, model2, args.rgb1, args.rgb2, srcH, trgH, device)
+		srcPts, trgPts, matchImg, matchImgOrtho = getPerspKeypoints2(model1, model2, args.rgb1, args.rgb2, srcH, trgH, device)
 	elif args.sift:
-		srcPts, trgPts = siftMatching(args.rgb1, args.rgb2, srcH, trgH, device)
-	elif args.superpoint:
-		from SuperGluePretrainedNetwork.models.matching import Matching
-		config = {
-			'superpoint': {
-				'nms_radius': 4,
-				'keypoint_threshold': 0.005,
-				'max_keypoints': 1024
-			},
-			'superglue': {
-				'weights': 'outdoor',
-				'sinkhorn_iterations': 20,
-				'match_threshold': 0.2,
-			}
-		}
-		matching = Matching(config).eval().to(device)
-		srcPts, trgPts = super_point_matcher(matching, args.rgb1, args.rgb2, srcH, trgH, device)
+		srcPts, trgPts, matchImg, matchImgOrtho = siftMatching(args.rgb1, args.rgb2, srcH, trgH, device)
 
+	#### Visualization ####
+	print("\nShowing matches in perspective and orthographic view. Press q\n")
+	cv2.imshow('Orthographic view', matchImgOrtho)
+	cv2.imshow('Perspective view', matchImg)
+	cv2.waitKey()
 
 	srcPts = convertPts(srcPts)
 	trgPts = convertPts(trgPts)
@@ -274,9 +256,10 @@ if __name__ == "__main__":
 
 	p2p = o3d.registration.TransformationEstimationPointToPoint()
 	trans_init = p2p.compute_transformation(srcCld, trgCld, o3d.utility.Vector2iVector(corr))
-	print(trans_init)
+	print("Transformation matrix: \n", trans_init)
 
-	if args.viz:
-		o3d.visualization.draw_geometries(srcSph)
-		o3d.visualization.draw_geometries(trgSph)
+	if args.viz3d:
+		# o3d.visualization.draw_geometries(srcSph)
+		# o3d.visualization.draw_geometries(trgSph)
+
 		draw_registration_result(srcCld, trgCld, trans_init)
