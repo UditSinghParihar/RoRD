@@ -7,7 +7,8 @@
 <sup>2</sup> QUT Centre for Robotics, Queensland University of Technology (QUT), Australia. 
 
 
-#### [Paper](https://arxiv.org/abs/2103.08573)
+> #### [Paper](https://arxiv.org/abs/2103.08573) | [Code](https://github.com/UditSinghParihar/RoRD)  
+
 
 <!-- ![Alt Text](images/teaser.jpg) -->
 <!-- <img src="images/teaser.jpg" alt="teaser" width="450"/> -->
@@ -33,9 +34,6 @@ We present a novel framework that combines learning of invariant descriptors thr
 
  **RoRD pipeline**. Our approach takes a pair of perspective view images with significant viewpoint as input to the Orthographic View Generator, which aligns the camera to the plane-surface-normal to generate the top views. These top views are then passed to an ensemble of *Vanilla D2-Net* and *RoRD* techniques (ours). This approach creates precise feature correspondences that are robust to variations in viewpoints.
 
-
-## Code  
-[GitHub Repository](https://github.com/UditSinghParihar/RoRD)  
 
 ## Dataset  
 The DiverseView dataset consists of 4 scenes of indoor and outdoor locations, with images captured at high viewpoint changes and camera rotations (up to 180 degrees). For the data collection, we have used the Intel RealSense D455 camera with RGB, Depth, and IMU sensors.  
