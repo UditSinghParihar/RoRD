@@ -21,26 +21,26 @@ device = torch.device('cuda:0' if use_cuda else 'cpu')
 parser = argparse.ArgumentParser(description='RoRD ICP evaluation')
 
 parser.add_argument(
-	'--rgb1', type=str, required=True,
+	'--rgb1', type=str, default = 'rgb/rgb2_1.jpg',
 	help='path to the rgb image1'
 )
 parser.add_argument(
-	'--rgb2', type=str, required=True,
+	'--rgb2', type=str, default = 'rgb/rgb2_2.jpg',
 	help='path to the rgb image2'
 )
 
 parser.add_argument(
-	'--depth1', type=str, required=True,
-	help='path to the rgb image2'
+	'--depth1', type=str, default = 'depth/depth2_1.png',
+	help='path to the depth image1'
 )
 
 parser.add_argument(
-	'--depth2', type=str, required=True,
-	help='path to the rgb image2'
+	'--depth2', type=str, default = 'depth/depth2_2.png',
+	help='path to the depth image2'
 )
 
 parser.add_argument(
-	'--model_rord', type=str,
+	'--model_rord', type=str, default = '../models/rord.pth',
 	help='path to the RoRD model for evaluation'
 )
 
