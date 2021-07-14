@@ -3,6 +3,8 @@ Rotation-Robust Descriptors and Orthographic Views for Local Feature Matching
 
 > [Project Page](https://uditsinghparihar.github.io/RoRD/) | [Paper link](https://arxiv.org/abs/2103.08573)
 
+> Accepted to [IROS 2021](https://www.iros2021.org/)  
+
 <img src="assets/teaser2.jpg" alt="pipeline" width="1000" height="220" /> 
 
 ## Evaluation and Datasets
