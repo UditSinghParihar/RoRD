@@ -8,6 +8,7 @@
 
 
 > #### [Paper](https://arxiv.org/abs/2103.08573) | [Code](https://github.com/UditSinghParihar/RoRD)  
+> Accepted to [IROS 2021](https://www.iros2021.org/)  
 
 
 <!-- ![Alt Text](images/teaser.jpg) -->
