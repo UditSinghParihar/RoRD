@@ -9,7 +9,7 @@ Rotation-Robust Descriptors and Orthographic Views for Local Feature Matching
 
 ## Evaluation and Datasets
 
-- **MMA** : Training on [PhotoTourism](https://www.cs.ubc.ca/~kmyi/imw2020/data.html) and testing on [HPatches](https://github.com/hpatches/hpatches-dataset) and proposed [Rotated HPatches](add_link)
+- **MMA** : Training on [PhotoTourism](https://www.cs.ubc.ca/~kmyi/imw2020/data.html) and testing on [HPatches](https://github.com/hpatches/hpatches-dataset) and proposed [Rotated HPatches](https://drive.google.com/file/d/1yrxChlq1XdH-fmTPmmiIzRlJlfO_EPW0/view?usp=sharing)
 - **Pose Estimation** : Training on same PhotoTourism datasets as used for MMA and testing on proposed [DiverseView](https://drive.google.com/file/d/1BkhcHBKwcjNHgbLZ1XKurpcP7v4hFD_b/view?usp=sharing)  
 - **Visual Place Recognition** : Oxford RobotCar [training sequence](https://robotcar-dataset.robots.ox.ac.uk/datasets/2014-07-14-14-49-50/) and [testing sequence](https://robotcar-dataset.robots.ox.ac.uk/datasets/2014-06-26-09-24-58/)
 
