@@ -57,11 +57,13 @@ The three sequences of this dataset are as follows:
 
 | **Model**         | **Standard**              | **Rotated**               | **Average**               |
 | ----------------- | ------------------------- | ------------------------- | ------------------------- |
-| SIFT              | 0.52/0.54/0.54            | 0.51/0.51/0.52            | <u>0.52/0.53/0.53</u>     |
+| SIFT              | 0.52/0.54/0.54            | <u><b>0.51/0.51/0.52</b></u>            | <u>0.52/0.53/0.53</u>     |
 | SuperPoint        | 0.69/0.71/0.73            | 0.21/0.22/0.22            | 0.45/0.46/0.48            |
 | D2-Net            | **0.73/0.81/0.84**        | 0.17/0.20/0.22            | 0.45/0.50/0.53            |
-| (Ours) RoRD       | 0.68/0.75/0.78            | **0.46/0.57/0.62**        | **0.57/0.66/0.70**        |
-| (Ours) RoRD Comb. | <u>0.71/0.78/0.81</u>     | <u>0.44/0.54/0.59</u>     | **0.57/0.66/0.70**        |
-| (Ours) RoRD + CE  | <u><b>0.79/0.84/0.86</b></u> | <u><b>0.48/0.59/0.64</b></u> | <u><b>0.64/0.72/0.75</b></u> | 
+| (Ours) RoRD       | 0.68/0.75/0.78            | <u>0.46/0.57/0.62</u>     | **0.57/0.66/0.70**        |
+| (Ours) RoRD Comb. | <u>0.71/0.78/0.81</u>     | 0.44/0.54/0.59            | **0.57/0.66/0.70**        |
+| (Ours) RoRD + CE  | <u><b>0.79/0.84/0.86</b></u> | **0.48/0.59/0.64**     | <u><b>0.64/0.72/0.75</b></u> | 
 
-**MMA results on standard and proposed HPatches variant** at pixel thresholds of 6px/8px/10px
+
+
+**Quantitative results for MMA on the HPatches dataset using pixel thresholds 6/8/10**. We highlight First, Second and Third best MMA values. We also provide averages over the results obtained by the Standard and Rotated HPatches dataset. Our Ensemble method ,RoRD + CE, outperforms all other methods with RoRD and SIFT being the second and the third best performer for the averaged HPatches datasets, respectively. However on the Rotated HPatches SIFT is able to outperforms other methods, with RORD Ensemble being the close second.
