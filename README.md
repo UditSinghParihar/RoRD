@@ -55,8 +55,19 @@ The three sequences of this dataset are as follows:
 
 
 <p align="center">
-<img src="images/hseq.png" alt="results" width="400"/>
+
+| **Model**         | **Standard**              | **Rotated**               | **Average**               |
+| ----------------- | ------------------------- | ------------------------- | ------------------------- |
+| SIFT              | 0.52/0.54/0.54            | 0.51/0.51/0.52            | <u>0.52/0.53/0.53</u>     |
+| SuperPoint        | 0.69/0.71/0.73            | 0.21/0.22/0.22            | 0.45/0.46/0.48            |
+| D2-Net            | **0.73/0.81/0.84**        | 0.17/0.20/0.22            | 0.45/0.50/0.53            |
+| (Ours) RoRD       | 0.86/0.75/0.78            | **0.46/0.57/0.62**        | **0.57/0.66/0.70**        |
+| (Ours) RoRD Comb. | <u>0.71/0.78/0.81</u>     | <u>0.44/0.54/0.59</u>     | **0.57/0.66/0.70**        |
+| (Ours) RoRD + CE  | <u>**0.79/0.84/0.86**</u> | <u>**0.48/0.59/0.64**</u> | <u>**0.64/0.72/0.75**</u> | 
+
+Table: MMA Results on Hpatches dataset at pixel thresholds of 6px/8px/10px
+<!-- <img src="images/hseq.png" alt="results" width="400"/>
 <img src="images/hseq_rotated.png" alt="results" width="400"/>
-</p> 
+ --></p> 
 
 **MMA results on standard and proposed HPatches variant.** 
