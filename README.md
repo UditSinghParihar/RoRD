@@ -54,7 +54,6 @@ The three sequences of this dataset are as follows:
 **Qualitative results from the DiverseView dataset**. Each row corresponds to a different sequence from the dataset. *RoRD* leverages its learnt *rotation-robust features* to obtain precise feature correspondences, outperforming D2-net. Incorporating orthographic views with RoRD, *(RoRD + OV)* further improves performance, and outperforms both D2-Net and RoRD for all the four sequences.  
 
 
-<p align="center">
 
 | **Model**         | **Standard**              | **Rotated**               | **Average**               |
 | ----------------- | ------------------------- | ------------------------- | ------------------------- |
@@ -65,9 +64,4 @@ The three sequences of this dataset are as follows:
 | (Ours) RoRD Comb. | <u>0.71/0.78/0.81</u>     | <u>0.44/0.54/0.59</u>     | **0.57/0.66/0.70**        |
 | (Ours) RoRD + CE  | <u>**0.79/0.84/0.86**</u> | <u>**0.48/0.59/0.64**</u> | <u>**0.64/0.72/0.75**</u> | 
 
-Table: MMA Results on Hpatches dataset at pixel thresholds of 6px/8px/10px
-<!-- <img src="images/hseq.png" alt="results" width="400"/>
-<img src="images/hseq_rotated.png" alt="results" width="400"/>
- --></p> 
-
-**MMA results on standard and proposed HPatches variant.** 
+**MMA results on standard and proposed HPatches variant** at pixel thresholds of 6px/8px/10px
