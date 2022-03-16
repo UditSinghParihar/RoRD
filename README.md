@@ -67,3 +67,6 @@ The three sequences of this dataset are as follows:
 
 
 **Quantitative results for MMA on the HPatches dataset using pixel thresholds 6/8/10**. We highlight First, Second and Third best MMA values. We also provide averages over the results obtained by the Standard and Rotated HPatches dataset. Our Ensemble method ,RoRD + CE, outperforms all other methods with RoRD and SIFT being the second and the third best performer for the averaged HPatches datasets, respectively. However on the Rotated HPatches SIFT is able to outperforms other methods, with RORD Ensemble being the close second.
+
+**Footnote:**  
+In the IEEE's published version of this paper (`DOI: 10.1109/IROS51168.2021.9636619`), SIFT's results in the `Rotated` and `Average` columns of *MMA table* are incorrect, which we have now corrected in this arXiv version and over GitHub: https://github.com/UditSinghParihar/RoRD. This change only affects the performance ranking of MMA evaluation on the HPatches dataset, where our proposed method still ranks the best when considering standard and average settings. Other results in the paper which benchmark against SIFT, that is, Pose Estimation and Visual Place Recognition, are *not* affected.
