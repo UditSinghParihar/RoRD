@@ -51,9 +51,18 @@ The three sequences of this dataset are as follows:
 <img src="images/results_qual.jpg" alt="results" width="800"/>
 </p> 
 
+### DiverseView Dataset
+
 **Qualitative results from the DiverseView dataset**. Each row corresponds to a different sequence from the dataset. *RoRD* leverages its learnt *rotation-robust features* to obtain precise feature correspondences, outperforming D2-net. Incorporating orthographic views with RoRD, *(RoRD + OV)* further improves performance, and outperforms both D2-Net and RoRD for all the four sequences.  
 
 ---
+
+
+### HPatches Dataset
+
+<p align="center">
+<img src="images/hpatches.jpg" alt="hpatches_results" width="800"/>
+</p> 
 
 | **Model**         | **Standard**              | **Rotated**               | **Average**               |
 | ----------------- | ------------------------- | ------------------------- | ------------------------- |
@@ -61,7 +70,7 @@ The three sequences of this dataset are as follows:
 | SuperPoint        | 0.69/0.71/0.73            | 0.21/0.22/0.22            | 0.45/0.46/0.48            |
 | D2-Net            | **0.73/0.81/0.84**        | 0.17/0.20/0.22            | 0.45/0.50/0.53            |
 | (Ours) RoRD       | 0.68/0.75/0.78            | <u>0.46/0.57/0.62</u>     | **0.57/0.66/0.70**        |
-| (Ours) RoRD Comb. | <u>0.71/0.78/0.81</u>     | 0.44/0.54/0.59            | **0.57/0.66/0.70**        |
+| (Ours) RoRD Comb. | <u>0.71/0.78/0.81</u>     | 0.44/0.54/0.59            | **0.58/0.66/0.70**        |
 | (Ours) RoRD + CE  | <u><b>0.79/0.84/0.86</b></u> | **0.48/0.59/0.64**     | <u><b>0.64/0.72/0.75</b></u> | 
 
 
@@ -69,4 +78,4 @@ The three sequences of this dataset are as follows:
 **Quantitative results for MMA on the HPatches dataset using pixel thresholds 6/8/10**. We highlight First, Second and Third best MMA values. We also provide averages over the results obtained by the Standard and Rotated HPatches dataset. Our Ensemble method ,RoRD + CE, outperforms all other methods with RoRD and SIFT being the second and the third best performer for the averaged HPatches datasets, respectively. However on the Rotated HPatches SIFT is able to outperforms other methods, with RORD Ensemble being the close second.
 
 **Footnote:**  
-In the IEEE's published version of this paper (`DOI: 10.1109/IROS51168.2021.9636619`), SIFT's results in the `Rotated` and `Average` columns of *MMA table* are incorrect, which we have now corrected in this arXiv version and over GitHub: https://github.com/UditSinghParihar/RoRD. This change only affects the performance ranking of MMA evaluation on the HPatches dataset, where our proposed method still ranks the best when considering standard and average settings. Other results in the paper which benchmark against SIFT, that is, Pose Estimation and Visual Place Recognition, are *not* affected.
+In the IEEE's published version of this paper (`DOI: 10.1109/IROS51168.2021.9636619`), SIFT's results in the `Rotated` and `Average` columns of *MMA table* are incorrect, which we have now corrected in the latest arXiv version and over GitHub: https://github.com/UditSinghParihar/RoRD. This change only affects the performance ranking of MMA evaluation on the HPatches dataset, where our proposed method still ranks the best when considering standard and average settings. Other results in the paper which benchmark against SIFT, that is, Pose Estimation and Visual Place Recognition, are *not* affected.
