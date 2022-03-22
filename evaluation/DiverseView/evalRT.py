@@ -37,13 +37,11 @@ parser.add_argument(
 )
 
 parser.add_argument(
-	'--model_rord', type=str, default='../../models/rord.pth',
-	help='path to the RoRD model for evaluation'
+	'--model_rord', type=str, help='path to the RoRD model for evaluation'
 )
 
 parser.add_argument(
-	'--model_d2', type=str, default='../../models/d2net.pth',
-	help='path to the vanilla D2-Net model for evaluation'
+	'--model_d2', type=str, help='path to the vanilla D2-Net model for evaluation'
 )
 
 parser.add_argument(
@@ -233,9 +231,10 @@ if __name__ == "__main__":
 			trgImg = trgH.replace('.npy', '.jpg')
 
 			if args.model_rord:
-				srcPts, trgPts, matchImg = getPerspKeypoints(srcImg, trgImg, srcH, trgH, model2, device)
+				srcPts, trgPts, matchImg, _ = getPerspKeypoints(srcImg, trgImg, srcH, trgH, model2, device)
+				# print("Inside rord.")
 			elif args.model_d2:
-				srcPts, trgPts, matchImg = getPerspKeypoints(srcImg, trgImg, srcH, trgH, model1, device)
+				srcPts, trgPts, matchImg, _ = getPerspKeypoints(srcImg, trgImg, srcH, trgH, model1, device)
 			elif args.model_ens:
 				model1 = D2Net(model_file=model1_ens)
 				model1 = model1.to(device)
@@ -244,7 +243,7 @@ if __name__ == "__main__":
 				srcPts, trgPts, matchImg = getPerspKeypoints2(model1, model2, srcImg, trgImg, srcH, trgH, device)
 			elif args.sift:
 				srcPts, trgPts, matchImg = siftMatching(srcImg, trgImg, srcH, trgH, device)
-
+				# print("Inside sift")
 			if(isinstance(srcPts, list) == True):
 				print(np.identity(4))
 				filter_list.append(np.identity(4))
@@ -268,7 +267,7 @@ if __name__ == "__main__":
 
 			corr = get3dCor(srcIdx, trgIdx)
 
-			p2p = o3d.registration.TransformationEstimationPointToPoint()
+			p2p = o3d.pipelines.registration.TransformationEstimationPointToPoint()
 			trans_init = p2p.compute_transformation(srcCld, trgCld, o3d.utility.Vector2iVector(corr))
 			# print(trans_init)
 			filter_list.append(trans_init)

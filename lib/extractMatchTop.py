@@ -46,8 +46,9 @@ def siftMatching(img1, img2, HFile1, HFile2, device):
 	H1 = np.load(HFile1)
 	H2 = np.load(HFile2)
 
-	img1 = Image.open(img1)
 	rgbFile1 = img1
+	img1 = Image.open(img1)
+	
 	if(img1.mode != 'RGB'):
 		img1 = img1.convert('RGB')
 	img1 = np.array(img1)
@@ -57,8 +58,9 @@ def siftMatching(img1, img2, HFile1, HFile2, device):
 	# cv2.imshow("Image", cv2.cvtColor(img1, cv2.COLOR_BGR2RGB))
 	# cv2.waitKey(0)
 
-	img2 = Image.open(img2)
 	rgbFile2 = img2
+	img2 = Image.open(img2)
+	
 	if(img2.mode != 'RGB'):
 		img2 = img2.convert('RGB')
 	img2 = np.array(img2)
@@ -101,8 +103,9 @@ def siftMatching(img1, img2, HFile1, HFile2, device):
 	src_pts = np.float32([ inlier_keypoints_left[m.queryIdx].pt for m in placeholder_matches ]).reshape(-1, 2)
 	dst_pts = np.float32([ inlier_keypoints_right[m.trainIdx].pt for m in placeholder_matches ]).reshape(-1, 2)
 	orgSrc, orgDst = orgKeypoints(src_pts, dst_pts, H1, H2)
-	
-	return orgSrc, orgDst, image3
+	matchImg = drawOrg(cv2.imread(rgbFile1), cv2.imread(rgbFile2), orgSrc, orgDst)
+
+	return orgSrc, orgDst, matchImg
 
 
 def orgKeypoints(src_pts, dst_pts, H1, H2):
