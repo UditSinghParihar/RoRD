@@ -10,7 +10,7 @@ Rotation-Robust Descriptors and Orthographic Views for Local Feature Matching
 ## Evaluation and Datasets
 
 - **MMA** : Training on [PhotoTourism](https://www.cs.ubc.ca/~kmyi/imw2020/data.html) and testing on [HPatches](https://github.com/hpatches/hpatches-dataset) and proposed [Rotated HPatches](https://drive.google.com/file/d/1yrxChlq1XdH-fmTPmmiIzRlJlfO_EPW0/view?usp=sharing)
-- **Pose Estimation** : Training on same PhotoTourism datasets as used for MMA and testing on proposed [DiverseView](https://drive.google.com/file/d/1BkhcHBKwcjNHgbLZ1XKurpcP7v4hFD_b/view?usp=sharing)  
+- **Pose Estimation** : Training on same PhotoTourism datasets as used for MMA and testing on proposed [DiverseView](https://drive.google.com/file/d/1yAcwLwSjJ6ammy8-7bRSCsqp8vjGoRM4/view?usp=sharing)  
 - **Visual Place Recognition** : Oxford RobotCar [training sequence](https://robotcar-dataset.robots.ox.ac.uk/datasets/2014-07-14-14-49-50/) and [testing sequence](https://robotcar-dataset.robots.ox.ac.uk/datasets/2014-06-26-09-24-58/)
 
 
@@ -37,7 +37,7 @@ You can evaluate RoRD on demo images or replace it with your custom images.
 
 ## DiverseView Dataset  
 
-Download dataset from [Google Drive](https://drive.google.com/file/d/1BkhcHBKwcjNHgbLZ1XKurpcP7v4hFD_b/view?usp=sharing) (97.8 MB) in the base directory (only needed if you want to evaluate on DiverseView Dataset).    
+Download dataset from [Google Drive](https://drive.google.com/file/d/1yAcwLwSjJ6ammy8-7bRSCsqp8vjGoRM4/view?usp=sharing) (97.8 MB) in the base directory (only needed if you want to evaluate on DiverseView Dataset).    
 
 ## Evaluation on DiverseView Dataset  
 The DiverseView Dataset is a custom dataset consisting of 4 scenes with images having high-angle camera rotations and viewpoint changes.  
