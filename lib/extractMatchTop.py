@@ -43,8 +43,9 @@ def extractSingle(image, model, device):
 
 
 def siftMatching(img1, img2, HFile1, HFile2, device):
-	H1 = np.load(HFile1)
-	H2 = np.load(HFile2)
+	if HFile1 is not None:
+		H1 = np.load(HFile1)
+		H2 = np.load(HFile2)
 
 	rgbFile1 = img1
 	img1 = Image.open(img1)
@@ -52,7 +53,9 @@ def siftMatching(img1, img2, HFile1, HFile2, device):
 	if(img1.mode != 'RGB'):
 		img1 = img1.convert('RGB')
 	img1 = np.array(img1)
-	img1 = cv2.warpPerspective(img1, H1, dsize=(400,400))
+
+	if HFile1 is not None:
+		img1 = cv2.warpPerspective(img1, H1, dsize=(400,400))
 
 	#### Visualization ####
 	# cv2.imshow("Image", cv2.cvtColor(img1, cv2.COLOR_BGR2RGB))
@@ -64,7 +67,9 @@ def siftMatching(img1, img2, HFile1, HFile2, device):
 	if(img2.mode != 'RGB'):
 		img2 = img2.convert('RGB')
 	img2 = np.array(img2)
-	img2 = cv2.warpPerspective(img2, H2, dsize=(400,400))
+
+	if HFile2 is not None:
+		img2 = cv2.warpPerspective(img2, H2, dsize=(400,400))
 
 	#### Visualization ####
 	# cv2.imshow("Image", cv2.cvtColor(img2, cv2.COLOR_BGR2RGB))
@@ -97,15 +102,20 @@ def siftMatching(img1, img2, HFile1, HFile2, device):
 
 	#### Visualization ####
 	image3 = cv2.drawMatches(img1, inlier_keypoints_left, img2, inlier_keypoints_right, placeholder_matches, None)
+	image3 = cv2.cvtColor(image3, cv2.COLOR_BGR2RGB)
 	# cv2.imshow('Matches', image3)
 	# cv2.waitKey()
 
 	src_pts = np.float32([ inlier_keypoints_left[m.queryIdx].pt for m in placeholder_matches ]).reshape(-1, 2)
 	dst_pts = np.float32([ inlier_keypoints_right[m.trainIdx].pt for m in placeholder_matches ]).reshape(-1, 2)
+	
+	if HFile1 is None:
+		return src_pts, dst_pts, image3, image3
+	
 	orgSrc, orgDst = orgKeypoints(src_pts, dst_pts, H1, H2)
 	matchImg = drawOrg(cv2.imread(rgbFile1), cv2.imread(rgbFile2), orgSrc, orgDst)
 
-	return orgSrc, orgDst, matchImg
+	return orgSrc, orgDst, matchImg, image3
 
 
 def orgKeypoints(src_pts, dst_pts, H1, H2):
@@ -186,11 +196,15 @@ def getPerspKeypoints(rgbFile1, rgbFile2, HFile1, HFile2, model, device):
 	# cv2.imshow('Matches', image3)
 	# cv2.waitKey()
 
+	if HFile1 is None:
+		return pos_a, pos_b, image3, image3
+
 	orgSrc, orgDst = orgKeypoints(pos_a, pos_b, H1, H2)
 	matchImg = drawOrg(cv2.imread(rgbFile1), cv2.imread(rgbFile2), orgSrc, orgDst) # Reproject matches to perspective View
 
 	return orgSrc, orgDst, matchImg, image3
 
+	
 
 ###### Ensemble
 def read_and_process_image(img_path, resize=None, H=None, h=None, w=None, preprocessing='caffe'):
@@ -229,7 +243,7 @@ def mnn_matcher(descriptors_a, descriptors_b):
 	return matches.t().data.cpu().numpy()
 
 
-def getPerspKeypoints2(model1, model2, rgbFile1, rgbFile2, HFile1, HFile2, device):
+def getPerspKeypointsEnsemble(model1, model2, rgbFile1, rgbFile2, HFile1, HFile2, device):
 	if HFile1 is None:
 		igp1, img1 = read_and_process_image(rgbFile1, H=None)
 	else:

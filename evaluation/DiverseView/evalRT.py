@@ -12,7 +12,7 @@ import cv2
 
 sys.path.append("../../")
 
-from lib.extractMatchTop import getPerspKeypoints, getPerspKeypoints2, siftMatching
+from lib.extractMatchTop import getPerspKeypoints, getPerspKeypointsEnsemble, siftMatching
 import pandas as pd
 
 
@@ -69,7 +69,14 @@ parser.add_argument(
 	help='path to the camera intrinsics file. In order: focal_x, focal_y, center_x, center_y, scaling_factor.'
 )
 
+parser.add_argument(
+	'--persp', action='store_true', default=False,
+	help='Feature matching on perspective images.'
+)
+
+parser.set_defaults(fp16=False)
 args = parser.parse_args()
+
 
 if args.model_ens: # Change default paths accordingly for ensemble
 	model1_ens = '../../models/rord.pth'
@@ -231,19 +238,30 @@ if __name__ == "__main__":
 			trgImg = trgH.replace('.npy', '.jpg')
 
 			if args.model_rord:
-				srcPts, trgPts, matchImg, _ = getPerspKeypoints(srcImg, trgImg, srcH, trgH, model2, device)
-				# print("Inside rord.")
+				if args.persp:
+					srcPts, trgPts, matchImg, _ = getPerspKeypoints(srcImg, trgImg, HFile1=None, HFile2=None, model=model2, device=device)
+				else:
+					srcPts, trgPts, matchImg, _ = getPerspKeypoints(srcImg, trgImg, srcH, trgH, model2, device)
+			
 			elif args.model_d2:
-				srcPts, trgPts, matchImg, _ = getPerspKeypoints(srcImg, trgImg, srcH, trgH, model1, device)
+				if args.persp:
+					srcPts, trgPts, matchImg, _ = getPerspKeypoints(srcImg, trgImg, HFile1=None, HFile2=None, model=model2, device=device)
+				else:
+					srcPts, trgPts, matchImg, _ = getPerspKeypoints(srcImg, trgImg, srcH, trgH, model1, device)
+			
 			elif args.model_ens:
 				model1 = D2Net(model_file=model1_ens)
 				model1 = model1.to(device)
 				model2 = D2Net(model_file=model2_ens)
 				model2 = model2.to(device)
-				srcPts, trgPts, matchImg = getPerspKeypoints2(model1, model2, srcImg, trgImg, srcH, trgH, device)
+				srcPts, trgPts, matchImg = getPerspKeypointsEnsemble(model1, model2, srcImg, trgImg, srcH, trgH, device)
+			
 			elif args.sift:
-				srcPts, trgPts, matchImg = siftMatching(srcImg, trgImg, srcH, trgH, device)
-				# print("Inside sift")
+				if args.persp:
+					srcPts, trgPts, matchImg, _ = siftMatching(srcImg, trgImg, HFile1=None, HFile2=None, device=device)
+				else:
+					srcPts, trgPts, matchImg, _ = siftMatching(srcImg, trgImg, srcH, trgH, device)
+
 			if(isinstance(srcPts, list) == True):
 				print(np.identity(4))
 				filter_list.append(np.identity(4))
@@ -279,7 +297,6 @@ if __name__ == "__main__":
 
 			if(dbId%args.log_interval == 0):
 				cv2.imwrite(os.path.join(args.output_dir, 'vis') + "/matchImg.%02d.%02d.jpg"%(queryId, dbId//args.log_interval), matchImg)
-			
 			dbId += 1
 
 

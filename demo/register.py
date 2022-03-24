@@ -10,7 +10,7 @@ import cv2
 import torch
 
 sys.path.append("../")
-from lib.extractMatchTop import getPerspKeypoints, getPerspKeypoints2, siftMatching
+from lib.extractMatchTop import getPerspKeypoints, getPerspKeypointsEnsemble, siftMatching
 from lib.model_test import D2Net
 
 #### Cuda ####
@@ -230,7 +230,7 @@ if __name__ == "__main__":
 		model1 = model1.to(device)
 		model2 = D2Net(model_file=model2_ens)
 		model2 = model2.to(device)
-		srcPts, trgPts, matchImg, matchImgOrtho = getPerspKeypoints2(model1, model2, args.rgb1, args.rgb2, srcH, trgH, device)
+		srcPts, trgPts, matchImg, matchImgOrtho = getPerspKeypointsEnsemble(model1, model2, args.rgb1, args.rgb2, srcH, trgH, device)
 	elif args.sift:
 		srcPts, trgPts, matchImg, matchImgOrtho = siftMatching(args.rgb1, args.rgb2, srcH, trgH, device)
 

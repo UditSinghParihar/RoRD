@@ -67,10 +67,14 @@ The DiverseView Dataset is a custom dataset consisting of 4 scenes with images h
 	3. Example:  
 		1. `python evalRT.py --dataset /path/to/preprocessed/ --sequence data1 --model_rord ../../models/rord.pth --output_dir out`  
 	4. This would generate `out` folder containing predicted transformations and matching results in `out/vis` folder, containing images like below:
-
-#### RoRD  
-<img src="assets/rord_evalRT.jpg" alt="pipeline" width="600" height="220" /> 
-
+	
+	#### RoRD  
+	<img src="assets/rord_evalRT.jpg" alt="pipeline" width="600" height="220" />   	
+	
+	5. SIFT Matching:	
+		1. `python evalRT.py --dataset /path/to/preprocessed/ --sequence data1 --sift --output_dir out_sift`  
+	6. Matching on perspective view:  
+		1. `python evalRT.py --dataset /path/to/preprocessed/ --sequence data1 --model_rord ../../models/rord.pth --output_dir out_persp --persp`  
 
 ## Training RoRD on PhotoTourism Images  
 1. Training using rotation homographies with initialization from D2Net weights (Download base models as mentioned in [Pretrained Models](#pretrained-models)).  
