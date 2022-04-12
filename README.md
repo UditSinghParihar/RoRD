@@ -108,14 +108,12 @@ Our base model is borrowed from [D2-Net](https://github.com/mihaidusmanu/d2-net)
 If you use this code in your project, please cite the following paper:
 
 ```bibtex
-
-@misc{rord2021,
-      title={RoRD: Rotation-Robust Descriptors and Orthographic Views for Local Feature Matching}, 
-      author={Udit Singh Parihar and Aniket Gujarathi and Kinal Mehta and Satyajit Tourani and Sourav Garg and Michael Milford and K. Madhava Krishna},
-      year={2021},
-      eprint={2103.08573},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV}
+@inproceedings{parihar2021rord,
+  title={RoRD: Rotation-Robust Descriptors and Orthographic Views for Local Feature Matching},
+  author={Parihar, Udit Singh and Gujarathi, Aniket and Mehta, Kinal and Tourani, Satyajit and Garg, Sourav and Milford, Michael and Krishna, K Madhava},
+  booktitle={2021 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)},
+  pages={1593--1600},
+  organization={IEEE}
 }
 ```
 
