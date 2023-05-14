@@ -7,7 +7,7 @@
 <sup>2</sup> QUT Centre for Robotics, Queensland University of Technology (QUT), Australia. 
 
 
-> #### [Paper](https://arxiv.org/abs/2103.08573) | [Code](https://github.com/UditSinghParihar/RoRD)  
+> #### [Paper](https://arxiv.org/abs/2103.08573) | [Code](https://github.com/UditSinghParihar/RoRD) | [Thesis Slides](https://docs.google.com/presentation/d/1Yx3n-oEmjrny8Xav7IrjPVvYbZsARCkI/edit?usp=sharing&ouid=108069075984130519050&rtpof=true&sd=true)  
 > Accepted to [IROS 2021](https://www.iros2021.org/)  
 
 
@@ -79,3 +79,17 @@ The three sequences of this dataset are as follows:
 
 **Footnote:**  
 In the IEEE's published version of this paper (`DOI: 10.1109/IROS51168.2021.9636619`), SIFT's results in the `Rotated` and `Average` columns of *MMA table* are incorrect, which we have now corrected in the latest arXiv version and over GitHub: https://github.com/UditSinghParihar/RoRD. This change only affects the performance ranking of MMA evaluation on the HPatches dataset, where our proposed method still ranks the best when considering standard and average settings. Other results in the paper which benchmark against SIFT, that is, Pose Estimation and Visual Place Recognition, are *not* affected.
+
+
+
+## BibTex
+If you use this code in your project, please cite the following paper:
+
+```bibtex
+@inproceedings{parihar2021rord,
+  title={RoRD: Rotation-Robust Descriptors and Orthographic Views for Local Feature Matching},
+  author={Parihar, Udit Singh and Gujarathi, Aniket and Mehta, Kinal and Tourani, Satyajit and Garg, Sourav and Milford, Michael and Krishna, K Madhava},
+  booktitle={2021 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)},
+  pages={1593--1600},
+  organization={IEEE}
+}
