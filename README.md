@@ -20,7 +20,7 @@ Download models from [Google Drive](https://drive.google.com/file/d/1-5aLHyZ_qlH
 
 ## Evaluating RoRD  
 You can evaluate RoRD on demo images or replace it with your custom images.  
-1. Dependencies can be installed in a `conda` of `virtualenv` by running:   
+1. Dependencies can be installed in a `conda` or `virtualenv` (using `python 3.6`) by running:   
 	1. `pip install -r requirements.txt`  
 2. `python extractMatch.py <rgb_image1> <rgb_image2> --model_file  <path to the model file RoRD>`
 3. Example:  
